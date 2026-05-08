@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AccesoDatos
 {
-    public abstract class ConexionSql
+    public class ConexionSql
     {
         protected readonly string _connectionString;
 
@@ -43,10 +43,17 @@ namespace AccesoDatos
         public void ConsultaDatos(string sql, string Tabla)
         {
             Ds.Tables.Clear();
-            // Usamos directamente la cadena de conexión para el DataAdapter
-            Da = new SqlDataAdapter(sql, _connectionString);
-            Cmb = new SqlCommandBuilder(Da);
-            Da.Fill(Ds, Tabla);
+            try
+            {
+                Da = new SqlDataAdapter(sql, _connectionString);
+                Cmb = new SqlCommandBuilder(Da);
+                Da.Fill(Ds, Tabla);
+            }
+            catch (SqlException ex)
+            {
+                // registrar 'sql' y ex.Message antes de relanzar
+                throw new Exception($"Error al ejecutar SQL: {sql}. Mensaje: {ex.Message}", ex);
+            }
         }
 
         public void ConsultaDatosDM(string sql, string Tabla)
@@ -129,18 +136,6 @@ namespace AccesoDatos
                 int i = Convert.ToInt32(Comando.ExecuteScalar());
                 return i > 0;
             }
-        }
-
-        public class UsuarioAccesoDatos : ConexionSql
-        {
-            //public UsuarioAccesoDatos() : base() { }
-            public bool ValidarCredenciales(string AccesKey, string Username)
-            {
-                
-                string filtro = "CorreoCorporativo='" + Username + "' and PasswordHash ='" + AccesKey + "'";
-                return  this.ConsultaItem("Core.colaboradores", filtro);
-            }
-         
         }
     }
 }
