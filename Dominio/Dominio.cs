@@ -1,4 +1,5 @@
 ﻿using AccesoDatos;
+using System.Data;
 
 namespace Dominio
 {
@@ -161,6 +162,82 @@ namespace Dominio
                 return resultado;
             }
         }
+    }
+
+    /// <summary>
+    /// Servicio de dominio para registrar una nueva asignación de activo TI.
+    /// Contiene la lógica de validación antes de persistir.
+    /// </summary>
+    public class AsignarActivoDominio
+    {
+        private readonly AsignarActivoAccesoDatos _acceso = new();
+
+        // ── Consultas para poblar los paneles de búsqueda ─────────────────────
+
+        public DataTable ObtenerActivosDisponibles()
+            => _acceso.ObtenerActivosDisponibles();
+
+        public DataTable BuscarActivos(string termino)
+            => string.IsNullOrWhiteSpace(termino)
+                ? _acceso.ObtenerActivosDisponibles()
+                : _acceso.BuscarActivosDisponibles(termino.Trim());
+
+        public DataTable ObtenerColaboradores()
+            => _acceso.ObtenerColaboradores();
+
+        public DataTable BuscarColaboradores(string termino)
+            => string.IsNullOrWhiteSpace(termino)
+                ? _acceso.ObtenerColaboradores()
+                : _acceso.BuscarColaboradores(termino.Trim());
+
+        // ── Registrar asignación con validaciones ─────────────────────────────
+
+        /// <summary>
+        /// Valida las reglas de negocio y registra la asignación.
+        /// </summary>
+        /// <returns>
+        ///   Exitoso=true + AsignacionID si todo es correcto.
+        ///   Exitoso=false + Mensaje descriptivo si hay error de validación.
+        /// </returns>
+        public ResultadoAsignacion Registrar(
+            Guid? activoId,
+            int? colaboradorId,
+            DateTime fechaAsignacion,
+            string observaciones)
+        {
+            // ── Validaciones ──────────────────────────────────────────────────
+            if (activoId == null || activoId == Guid.Empty)
+                return Error("Debe seleccionar un activo de la lista.");
+
+            if (colaboradorId == null || colaboradorId <= 0)
+                return Error("Debe seleccionar un colaborador de la lista.");
+
+            if (fechaAsignacion > DateTime.Today)
+                return Error("La fecha de asignación no puede ser futura.");
+
+            // ── Persistir ─────────────────────────────────────────────────────
+            int id = _acceso.RegistrarAsignacion(
+                activoId.Value,
+                colaboradorId.Value,
+                fechaAsignacion,
+                observaciones);
+
+            return id > 0
+                ? new ResultadoAsignacion { Exitoso = true, AsignacionID = id }
+                : Error("Ocurrió un error al guardar. Intente nuevamente.");
+        }
+
+        // ── Helpers ───────────────────────────────────────────────────────────
+
+        private static ResultadoAsignacion Error(string msg)
+            => new() { Exitoso = false, Mensaje = msg };
+    }
+
+    public class ResultadoAsignacion
+    {
+        public bool Exitoso { get; set; }
+        public int AsignacionID { get; set; }
+        public string Mensaje { get; set; } = string.Empty;
     }
 
 
