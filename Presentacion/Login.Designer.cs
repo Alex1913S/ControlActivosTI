@@ -52,7 +52,7 @@
             lbl_Usuario.AutoSize = true;
             lbl_Usuario.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             lbl_Usuario.ForeColor = SystemColors.ButtonHighlight;
-            lbl_Usuario.Location = new Point(17, 327);
+            lbl_Usuario.Location = new Point(17, 286);
             lbl_Usuario.Name = "lbl_Usuario";
             lbl_Usuario.Size = new Size(132, 45);
             lbl_Usuario.TabIndex = 1;
@@ -63,7 +63,7 @@
             Username.BackColor = SystemColors.ButtonHighlight;
             Username.BorderStyle = BorderStyle.None;
             Username.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Username.Location = new Point(24, 372);
+            Username.Location = new Point(24, 331);
             Username.Name = "Username";
             Username.Size = new Size(356, 32);
             Username.TabIndex = 0;
@@ -74,7 +74,7 @@
             AccessKey.BackColor = SystemColors.ButtonHighlight;
             AccessKey.BorderStyle = BorderStyle.None;
             AccessKey.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            AccessKey.Location = new Point(24, 462);
+            AccessKey.Location = new Point(24, 421);
             AccessKey.Name = "AccessKey";
             AccessKey.Size = new Size(356, 32);
             AccessKey.TabIndex = 1;
@@ -85,7 +85,7 @@
             lbl_Contraseña.AutoSize = true;
             lbl_Contraseña.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             lbl_Contraseña.ForeColor = SystemColors.ButtonHighlight;
-            lbl_Contraseña.Location = new Point(17, 417);
+            lbl_Contraseña.Location = new Point(17, 376);
             lbl_Contraseña.Name = "lbl_Contraseña";
             lbl_Contraseña.Size = new Size(186, 45);
             lbl_Contraseña.TabIndex = 4;
@@ -97,7 +97,7 @@
             ViewerKey.FlatAppearance.BorderSize = 0;
             ViewerKey.FlatStyle = FlatStyle.Flat;
             ViewerKey.ForeColor = Color.White;
-            ViewerKey.Location = new Point(179, 514);
+            ViewerKey.Location = new Point(179, 473);
             ViewerKey.Name = "ViewerKey";
             ViewerKey.Size = new Size(36, 36);
             ViewerKey.TabIndex = 5;
@@ -196,9 +196,9 @@
             panel1.BackColor = Color.Transparent;
             panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
-            panel1.Location = new Point(402, 51);
+            panel1.Location = new Point(393, 40);
             panel1.Name = "panel1";
-            panel1.Size = new Size(864, 715);
+            panel1.Size = new Size(878, 735);
             panel1.TabIndex = 13;
             // 
             // Login
@@ -207,12 +207,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(7, 4, 40);
             ClientSize = new Size(1300, 803);
+            Controls.Add(CloseForm);
             Controls.Add(label3);
             Controls.Add(panel1);
             Controls.Add(label2);
             Controls.Add(LoginServices);
             Controls.Add(checkBox1);
-            Controls.Add(CloseForm);
             Controls.Add(progressBar1);
             Controls.Add(label1);
             Controls.Add(ViewerKey);

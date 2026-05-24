@@ -20,9 +20,14 @@ namespace Presentacion
         private readonly string _cargo;
         private readonly byte[] _foto;
 
+        private readonly AsignarActivoDominio _asignarDominio = new AsignarActivoDominio();
+        private Guid? _activoSeleccionadoId = null;
+        private int? _colaboradorSeleccionadoId = null;
+        private DataTable _dtActivosDisponibles = null;
+
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int radio1, int radio2);
-        //private static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int radio1, int radio2);
+
         public Dashboard(string username, string accesskey, string rol, string Company_Position, byte[] PictureBPhoto)
         {
             InitializeComponent();
@@ -31,6 +36,21 @@ namespace Presentacion
             _rol = rol;
             _cargo = Company_Position;
             _foto = PictureBPhoto;
+        }
+
+        private void InicializarPanelAsignacion()
+        {
+            dtpFechaAsignacion.Value = DateTime.Today;
+            dtpFechaAsignacion.MaxDate = DateTime.Today;
+
+            cmbTipoActivo.DataSource = null;
+            cmbActivos.DataSource = null;
+            cmbColaboradores.DataSource = null;
+
+            lblActivoSeleccionado.Text = "Ninguno";
+            lblColaboradorSeleccionado.Text = "Ninguno";
+            lblActivoSeleccionado.ForeColor = Color.Gray;
+            lblColaboradorSeleccionado.ForeColor = Color.Gray;
         }
 
 
@@ -270,6 +290,7 @@ namespace Presentacion
         private void BtnAgregarActivo_Click(object sender, EventArgs e)
         {
             MostrarPanel(PnlAgregarActivo);
+            PnlAgregarActivo.Dock = DockStyle.Fill;
             CargarCombosActivo();
         }
 
@@ -361,7 +382,7 @@ namespace Presentacion
 
             var dominio = new ActivosDominio();
             var resultado = dominio.CrearActivo(
-                // ── Tab 1 → ITAM.ActivosBase ─────────────────────────
+                // ITAM.ActivosBase ─────────────────────────
                 (int)cmbCategoria.SelectedValue,
                 (int)cmbUbicacion.SelectedValue,
                 txtMarca.Text.Trim(),
@@ -372,7 +393,7 @@ namespace Presentacion
                 costo,
                 cmbEstadoOperativo.Text,
 
-                // ── Tab 2 → ITAM.EspecificacionesHardware ────────────
+                //  ITAM.EspecificacionesHardware ────────────
                 txtProcesador.Text.Trim(),
                 txtMemoriaRAM.Text.Trim(),
                 txtAlmacenamiento1.Text.Trim(),
@@ -395,9 +416,9 @@ namespace Presentacion
             if (resultado.Exitoso)
             {
                 LimpiarFormActivo();
-                MostrarPanel(PnlEstadisticas);  // ← Vuelve al inicio
-                //CargarEstadisticas();            // ← Refresca números
-                //CargarActivosRecientes();        // ← Refresca tabla
+                MostrarPanel(PnlEstadisticas);
+                //CargarEstadisticas();         
+                //CargarActivosRecientes(); 
             }
         }
 
@@ -406,6 +427,268 @@ namespace Presentacion
             MostrarPanel(PnlEstadisticas);
             CargarEstadisticas();
             CargarActivosRecientes();
+            PnlEstadisticas.Dock = DockStyle.Fill;
+        }
+
+        private void BtnAsignaciones_Click(object sender, EventArgs e)
+        {
+            MostrarPanel(PnlAsignaciones);
+            CargarActivosDisponibles(); // Carga automática inmediata de activos
+            CargarColaboradores();      // Carga automática inmediata de colaboradores
+            LimpiarSeleccionAsignacion();
+        }
+
+        private void CargarActivosDisponibles(string termino = "")
+        {
+            try
+            {
+                // Traemos todos los activos en bodega de la base de datos inmediatamente
+                _dtActivosDisponibles = _asignarDominio.ObtenerActivosDisponibles();
+
+                if (_dtActivosDisponibles != null && !_dtActivosDisponibles.Columns.Contains("DisplayInfo"))
+                {
+                    // Formato visual de lo que el usuario leerá en el combo de activos
+                    _dtActivosDisponibles.Columns.Add("DisplayInfo", typeof(string),
+                        "EtiquetaActivo + ' | ' + Marca + ' ' + Modelo + ' (' + Sede + ')'");
+                }
+
+                // Desvinculamos el evento temporalmente para evitar ejecuciones en cascada durante la carga
+                cmbTipoActivo.SelectedIndexChanged -= cmbTipoActivo_SelectedIndexChanged;
+
+                if (_dtActivosDisponibles != null && _dtActivosDisponibles.Rows.Count > 0)
+                {
+                    // Extraemos las categorías únicas para el primer ComboBox
+                    DataView viewCategorias = new DataView(_dtActivosDisponibles);
+                    DataTable dtCategorias = viewCategorias.ToTable(true, "Categoria");
+
+                    // Insertamos la opción por defecto para ver todo el inventario
+                    DataRow rowTodos = dtCategorias.NewRow();
+                    rowTodos["Categoria"] = "— Todos los tipos —";
+                    dtCategorias.Rows.InsertAt(rowTodos, 0);
+
+                    // REGLA DE ORO: Configurar las columnas ANTES del DataSource
+                    cmbTipoActivo.DisplayMember = "Categoria";
+                    cmbTipoActivo.ValueMember = "Categoria";
+                    cmbTipoActivo.DataSource = dtCategorias;
+
+                    // Forzamos la selección en la opción de "Todos los tipos"
+                    cmbTipoActivo.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmbTipoActivo.DataSource = null;
+                }
+
+                // Volvemos a escuchar los cambios del usuario
+                cmbTipoActivo.SelectedIndexChanged += cmbTipoActivo_SelectedIndexChanged;
+
+                // Forzamos el llenado automático e inmediato del segundo ComboBox
+                FiltrarActivosDisponibles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar activos automáticamente:\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarColaboradores(string termino = "")
+        {
+            try
+            {
+                DataTable dt = _asignarDominio.ObtenerColaboradores();
+
+                cmbColaboradores.SelectedIndexChanged -= cmbColaboradores_SelectedIndexChanged;
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    if (!dt.Columns.Contains("DisplayInfo"))
+                        dt.Columns.Add("DisplayInfo", typeof(string), "NombreCompleto + ' | ' + Departamento");
+
+                    // REGLA DE ORO: Configurar mapeos ANTES del DataSource
+                    cmbColaboradores.DisplayMember = "DisplayInfo";
+                    cmbColaboradores.ValueMember = "ColaboradorID";
+                    cmbColaboradores.DataSource = dt;
+
+                    cmbColaboradores.SelectedIndex = -1;
+                }
+                else
+                {
+                    cmbColaboradores.DataSource = null;
+                }
+
+                _colaboradorSeleccionadoId = null;
+                lblColaboradorSeleccionado.Text = "Ninguno";
+                lblColaboradorSeleccionado.ForeColor = Color.Gray;
+
+                cmbColaboradores.SelectedIndexChanged += cmbColaboradores_SelectedIndexChanged;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar colaboradores automáticamente:\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cmbColaboradores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbColaboradores.SelectedValue != null && int.TryParse(cmbColaboradores.SelectedValue.ToString(), out int id))
+            {
+                _colaboradorSeleccionadoId = id;
+                lblColaboradorSeleccionado.Text = $"✔ {cmbColaboradores.Text}";
+                lblColaboradorSeleccionado.ForeColor = Color.FromArgb(0, 153, 76);
+            }
+        }
+
+        private void cmbActivos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbActivos.SelectedValue != null && cmbActivos.SelectedValue is Guid id)
+            {
+                _activoSeleccionadoId = id;
+                lblActivoSeleccionado.Text = $"✔ {cmbActivos.Text}";
+                lblActivoSeleccionado.ForeColor = Color.FromArgb(0, 153, 76);
+            }
+        }
+
+        private void txtBuscarActivo_TextChanged(object sender, EventArgs e)
+        {
+            //CargarActivosDisponibles(txtBuscarActivo.Text.Trim());
+        }
+
+        private void txtBuscarColaborador_TextChanged(object sender, EventArgs e)
+        {
+            CargarColaboradores(txtBuscarColaborador.Text.Trim());
+        }
+
+        private void cmbTipoActivo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FiltrarActivosDisponibles();
+        }
+
+        private void FiltrarActivosDisponibles()
+        {
+            if (_dtActivosDisponibles == null) return;
+
+            DataView dvFiltrado = new DataView(_dtActivosDisponibles);
+
+            // SOLUCIÓN AL ERROR: GetItemText extrae el texto real visible de forma 100% segura
+            string tipoSeleccionado = cmbTipoActivo.SelectedIndex >= 0
+                ? cmbTipoActivo.GetItemText(cmbTipoActivo.SelectedItem)
+                : "";
+
+            // Si seleccionó un tipo específico y no es la opción global, filtramos la lista
+            if (!string.IsNullOrEmpty(tipoSeleccionado) && tipoSeleccionado != "— Todos los tipos —")
+            {
+                string cat = tipoSeleccionado.Replace("'", "''");
+                dvFiltrado.RowFilter = $"Categoria = '{cat}'";
+            }
+
+            // Desvinculamos el evento para poblar el combo de activos limpiamente
+            cmbActivos.SelectedIndexChanged -= cmbActivos_SelectedIndexChanged;
+
+            // REGLA DE ORO: Configurar propiedades de mapeo ANTES del DataSource
+            cmbActivos.DisplayMember = "DisplayInfo";
+            cmbActivos.ValueMember = "ActivoID";
+            cmbActivos.DataSource = dvFiltrado;
+
+            // Lo dejamos cargado pero sin pre-seleccionar ninguno para obligar al usuario a elegir
+            cmbActivos.SelectedIndex = -1;
+
+            cmbActivos.SelectedIndexChanged += cmbActivos_SelectedIndexChanged;
+
+            // Reset de estados visuales de confirmación
+            _activoSeleccionadoId = null;
+            lblActivoSeleccionado.Text = "Ninguno";
+            lblActivoSeleccionado.ForeColor = Color.Gray;
+        }
+
+        private void LimpiarSeleccionAsignacion()
+        {
+            cmbTipoActivo.SelectedIndexChanged -= cmbTipoActivo_SelectedIndexChanged;
+            cmbActivos.SelectedIndexChanged -= cmbActivos_SelectedIndexChanged;
+            cmbColaboradores.SelectedIndexChanged -= cmbColaboradores_SelectedIndexChanged;
+
+            _activoSeleccionadoId = null;
+            _colaboradorSeleccionadoId = null;
+
+            // Restablece el tipo a "Todos" recargando el catálogo completo de activos
+            if (cmbTipoActivo.Items.Count > 0) cmbTipoActivo.SelectedIndex = 0;
+            FiltrarActivosDisponibles();
+
+            if (cmbColaboradores.Items.Count > 0) cmbColaboradores.SelectedIndex = -1;
+
+            lblActivoSeleccionado.Text = "Ninguno";
+            lblColaboradorSeleccionado.Text = "Ninguno";
+            lblActivoSeleccionado.ForeColor = Color.Gray;
+            lblColaboradorSeleccionado.ForeColor = Color.Gray;
+
+            txtObservacionesAsignacion.Clear();
+            dtpFechaAsignacion.Value = DateTime.Today;
+
+            cmbTipoActivo.SelectedIndexChanged += cmbTipoActivo_SelectedIndexChanged;
+            cmbActivos.SelectedIndexChanged += cmbActivos_SelectedIndexChanged;
+            cmbColaboradores.SelectedIndexChanged += cmbColaboradores_SelectedIndexChanged;
+        }
+
+        private void BtnGuardarAsignacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Recolectamos la información de las variables de estado y controles
+                Guid? activoId = _activoSeleccionadoId;
+                int? colaboradorId = _colaboradorSeleccionadoId;
+                DateTime fechaAsignacion = dtpFechaAsignacion.Value;
+                string observaciones = txtObservacionesAsignacion.Text.Trim();
+
+                // 2. Enviamos los datos a la capa de dominio para ejecutar las reglas de negocio
+                var resultado = _asignarDominio.Registrar(activoId, colaboradorId, fechaAsignacion, observaciones);
+
+                // 3. Procesamos el resultado de la operación
+                if (resultado.Exitoso)
+                {
+                    MessageBox.Show("¡Asignación guardada con éxito!\nEl estado del activo ha cambiado a 'Asignado'.",
+                        "Operación Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // 4. Actualizamos el catálogo local (el activo asignado desaparecerá automáticamente del ComboBox)
+                    CargarActivosDisponibles();
+
+                    // 5. Dejamos el formulario limpio y listo para un nuevo registro
+                    LimpiarSeleccionAsignacion();
+                }
+                else
+                {
+                    // Mostramos el mensaje de error específico que devolvió la capa de dominio (ej: fecha futura o campos vacíos)
+                    MessageBox.Show(resultado.Mensaje, "Aviso de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error inesperado en la interfaz al procesar la solicitud:\n{ex.Message}",
+                    "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnCancelarAsignacion_Click(object sender, EventArgs e)
+        {
+            // 1. Preguntar al usuario si realmente desea cancelar (buena práctica de UX)
+            DialogResult respuesta = MessageBox.Show(
+                "¿Está seguro de que desea cancelar? Se perderán los cambios no guardados.",
+                "Confirmar Cancelación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (respuesta == DialogResult.Yes)
+            {
+                // 2. Limpiamos por completo los controles y restablecemos las variables globales
+                LimpiarSeleccionAsignacion();
+
+                // 3. Ocultamos el panel de asignaciones para regresar a la vista principal
+                PnlAsignaciones.Visible = false;
+
+                // Opcional: Si tienes un panel de bienvenida o el fondo del dashboard, 
+                // asegúrate de que vuelva a ser visible aquí. Ejemplo:
+                // PnlInicio.Visible = true;
+            }
         }
     }
 }

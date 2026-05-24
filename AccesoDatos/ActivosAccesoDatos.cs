@@ -58,7 +58,7 @@ namespace AccesoDatos
 
                         cmdBase.ExecuteNonQuery();
 
-                        // 2️⃣ INSERT EspecificacionesHardware con el mismo GUID
+                        // INSERT EspecificacionesHardware con el mismo GUID
                         string sqlEspec = @"
                             INSERT INTO ITAM.EspecificacionesHardware
                                 (ActivoID, Procesador, MemoriaRAM,
@@ -94,6 +94,192 @@ namespace AccesoDatos
                         transaction.Rollback();
                         throw;
                     }
+                }
+            }
+        }
+
+        public bool ActualizarActivo(
+            Guid activoId, int categoriaId, int ubicacionId, string marca, string modelo,
+            string numeroSerie, int? proveedorId, DateTime? fechaAdquis, decimal? costo, string estadoOperativo,
+            string procesador, string memoriaRAM, string almac1, string almac2,
+            string tarjetaGrafica, string sistemaOperativo, string mac, string ip, string resolucion)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Actualizar tabla maestra: ITAM.ActivosBase
+                        string sqlBase = @"
+                            UPDATE ITAM.ActivosBase
+                            SET CategoriaID = @CategoriaID, UbicacionID = @UbicacionID, 
+                                Marca = @Marca, Modelo = @Modelo, NumeroSerie = @NumeroSerie, 
+                                ProveedorID = @ProveedorID, FechaAdquisicion = @FechaAdquisicion, 
+                                Costo = @Costo, EstadoOperativo = @EstadoOperativo
+                            WHERE ActivoID = @ActivoID";
+
+                        using (var cmd = new SqlCommand(sqlBase, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmd.Parameters.AddWithValue("@CategoriaID", categoriaId);
+                            cmd.Parameters.AddWithValue("@UbicacionID", ubicacionId);
+                            cmd.Parameters.AddWithValue("@Marca", marca ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Modelo", modelo ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@NumeroSerie", numeroSerie ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ProveedorID", proveedorId ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@FechaAdquisicion", fechaAdquis ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Costo", costo ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@EstadoOperativo", estadoOperativo);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 2. Actualizar tabla detalle: ITAM.EspecificacionesHardware
+                        string sqlHardware = @"
+                            UPDATE ITAM.EspecificacionesHardware
+                            SET Procesador = @Procesador, MemoriaRAM = @MemoriaRAM, 
+                                Almacenamiento1 = @Almacenamiento1, Almacenamiento2 = @Almacenamiento2,
+                                TarjetaGrafica = @TarjetaGrafica, SistemaOperativo = @SistemaOperativo, 
+                                DireccionMAC = @MAC, DireccionIP_Estatica = @IP, ResolucionPantalla = @Resolucion
+                            WHERE ActivoID = @ActivoID";
+
+                        using (var cmdEspec = new SqlCommand(sqlHardware, conn, transaction))
+                        {
+                            cmdEspec.Parameters.AddWithValue("@ActivoID", activoId);
+                            cmdEspec.Parameters.AddWithValue("@Procesador", procesador ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@MemoriaRAM", memoriaRAM ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@Almacenamiento1", almac1 ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@Almacenamiento2", almac2 ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@TarjetaGrafica", tarjetaGrafica ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@SistemaOperativo", sistemaOperativo ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@MAC", mac ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@IP", ip ?? (object)DBNull.Value);
+                            cmdEspec.Parameters.AddWithValue("@Resolucion", resolucion ?? (object)DBNull.Value);
+                            cmdEspec.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        //  ELIMINACIÓN LÓGICA (Cambio de estado a 'De Baja' para mantener consistencia de logs y llaves foráneas)
+        public bool DarDeBajaActivo(Guid activoId)
+        {
+            const string sql = "UPDATE ITAM.ActivosBase SET EstadoOperativo = 'De Baja' WHERE ActivoID = @ActivoID";
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ActivoID", activoId);
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public DataTable ObtenerTodosLosActivos()
+        {
+            const string sql = @"
+        SELECT 
+            AB.ActivoID, 
+            AB.EtiquetaActivo, 
+            AB.CategoriaID, 
+            CAT.Nombre AS Categoria,
+            AB.UbicacionID, 
+            UBI.NombreNomenclatura AS Sede, 
+            AB.Marca, 
+            AB.Modelo, 
+            AB.NumeroSerie, 
+            AB.FechaAdquisicion, 
+            AB.Costo, 
+            AB.EstadoOperativo,
+            -- Campos de hardware requeridos para el formulario:
+            EH.Procesador,
+            EH.MemoriaRAM,
+            EH.Almacenamiento1,
+            EH.Almacenamiento2,
+            EH.TarjetaGrafica,
+            EH.SistemaOperativo,
+            EH.DireccionMAC,
+            EH.DireccionIP_Estatica,
+            EH.ResolucionPantalla
+        FROM ITAM.ActivosBase AB
+        INNER JOIN ITAM.CategoriasActivo CAT ON AB.CategoriaID = CAT.CategoriaID
+        LEFT JOIN Core.Ubicaciones UBI ON AB.UbicacionID = UBI.UbicacionID
+        LEFT JOIN ITAM.EspecificacionesHardware EH ON AB.ActivoID = EH.ActivoID
+        WHERE AB.EstadoOperativo <> 'De Baja'
+        ORDER BY AB.FechaRegistro DESC";
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                    return dt;
+                }
+            }
+        }
+
+        public DataTable ObtenerCategorias()
+        {
+            const string sql = "SELECT CategoriaID, Nombre FROM ITAM.CategoriasActivo ORDER BY Nombre";
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                    return dt;
+                }
+            }
+        }
+
+        //// Obtener Categorías para los combos
+        //public DataTable ObtenerCategorias()
+        //{
+        //    const string sql = "SELECT CategoriaID, Nombre FROM ITAM.CategoriasActivo ORDER BY Nombre";
+        //    using (var conn = GetConnection())
+        //    {
+        //        conn.Open();
+        //        using (var cmd = new SqlCommand(sql, conn))
+        //        {
+        //            var dt = new DataTable();
+        //            using (var adapter = new SqlDataAdapter(cmd)) { adapter.Fill(dt); }
+        //            return dt;
+        //        }
+        //    }
+        //}
+
+        // Obtener Ubicaciones (Sedes) para los combos
+        public DataTable ObtenerUbicaciones()
+        {
+            const string sql = "SELECT UbicacionID, NombreNomenclatura FROM Core.Ubicaciones ORDER BY NombreNomenclatura";
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    var dt = new DataTable();
+                    using (var adapter = new SqlDataAdapter(cmd)) { adapter.Fill(dt); }
+                    return dt;
                 }
             }
         }

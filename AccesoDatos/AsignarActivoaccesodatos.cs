@@ -6,16 +6,8 @@ using System.Text;
 
 namespace AccesoDatos
 {
-    /// <summary>
-    /// Acceso a datos para el formulario de Nueva Asignación.
-    /// Operaciones: cargar activos disponibles, cargar colaboradores,
-    /// buscar en ambas listas y registrar la asignación en una transacción.
-    /// </summary>
     public class AsignarActivoAccesoDatos : ConexionSql
     {
-        // ══════════════════════════════════════════════════════════════════════
-        // ACTIVOS DISPONIBLES (EstadoOperativo = 'En Bodega')
-        // ══════════════════════════════════════════════════════════════════════
 
         public DataTable ObtenerActivosDisponibles()
         {
@@ -62,9 +54,6 @@ namespace AccesoDatos
             return Ejecutar(sql, cmd => cmd.Parameters.AddWithValue("@t", $"%{termino}%"));
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        // COLABORADORES ACTIVOS
-        // ══════════════════════════════════════════════════════════════════════
 
         public DataTable ObtenerColaboradores()
         {
@@ -109,13 +98,9 @@ namespace AccesoDatos
             return Ejecutar(sql, cmd => cmd.Parameters.AddWithValue("@t", $"%{termino}%"));
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        // REGISTRAR ASIGNACIÓN  (transacción atómica)
-        //   1. INSERT en ITAM.Asignaciones
-        //   2. UPDATE EstadoOperativo = 'Asignado' en ITAM.ActivosBase
-        // ══════════════════════════════════════════════════════════════════════
 
-        /// <returns>El AsignacionID generado, o -1 si falla.</returns>
+        // REGISTRAR ASIGNACIÓN
+
         public int RegistrarAsignacion(
             Guid activoId,
             int colaboradorId,
@@ -128,7 +113,7 @@ namespace AccesoDatos
 
             try
             {
-                // 1 — Insertar en ITAM.Asignaciones y recuperar el ID generado
+                // Insertar en ITAM.Asignaciones y recuperar el serial generado
                 const string sqlInsert = @"
                     INSERT INTO ITAM.Asignaciones
                            (ActivoID, ColaboradorID, FechaAsignacion, Observaciones)
@@ -147,7 +132,7 @@ namespace AccesoDatos
                     nuevoId = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
-                // 2 — Actualizar estado del activo
+                // Actualizar estado del activo
                 const string sqlUpdate = @"
                     UPDATE ITAM.ActivosBase
                        SET EstadoOperativo = 'Asignado'
@@ -169,9 +154,6 @@ namespace AccesoDatos
             }
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        // HELPER PRIVADO
-        // ══════════════════════════════════════════════════════════════════════
 
         private DataTable Ejecutar(string sql, Action<SqlCommand>? parametros = null)
         {

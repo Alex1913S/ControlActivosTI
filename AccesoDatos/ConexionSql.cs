@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using Microsoft.Data.SqlClient; // Esta es la que contiene SqlCommand
+using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,6 @@ namespace AccesoDatos
     {
         protected readonly string _connectionString;
 
-        // Objetos para persistencia de datos (DataSet)
         public DataSet Ds = new DataSet();
         public DataSet DsDM = new DataSet();
         private SqlDataAdapter Da;
@@ -26,7 +25,7 @@ namespace AccesoDatos
             _connectionString = @"Data Source=TI-ALEXANDER;Initial Catalog=GSSGSI1;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
         }
 
-        // Método para obtener la conexión lista para usar
+
         protected SqlConnection GetConnection()
         {
             return new SqlConnection(_connectionString);
@@ -51,7 +50,6 @@ namespace AccesoDatos
             }
             catch (SqlException ex)
             {
-                // registrar 'sql' y ex.Message antes de relanzar
                 throw new Exception($"Error al ejecutar SQL: {sql}. Mensaje: {ex.Message}", ex);
             }
         }
@@ -72,7 +70,7 @@ namespace AccesoDatos
                 SqlCommand Comando = new SqlCommand(sql, Conn);
                 int i = Comando.ExecuteNonQuery();
                 return i > 0;
-            } // El bloque using cierra la conexión automáticamente
+            } 
         }
 
         public bool ConsultaItem(string tabla, string condicion)
@@ -94,8 +92,6 @@ namespace AccesoDatos
                 Conn.Open();
                 string query = $"Select Count(*) From {tabla} Where {condicion}";
                 SqlCommand Comando = new SqlCommand(query, Conn);
-                // Usamos Count(*) porque ExecuteScalar devuelve un número, 
-                // intentar convertir un "Nombre" (string) a Int32 daría error.
                 int i = Convert.ToInt32(Comando.ExecuteScalar());
                 return i > 0;
             }
@@ -127,7 +123,6 @@ namespace AccesoDatos
 
         public bool Buscar(string tabla, string condicion)
         {
-            // Nota: Corregido para que cuente registros en lugar de intentar convertir texto a número
             using (var Conn = GetConnection())
             {
                 Conn.Open();
