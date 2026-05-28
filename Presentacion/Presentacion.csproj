@@ -32,8 +32,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Forms\Colaboradores\" />
-  </ItemGroup>
-
 </Project>

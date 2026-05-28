@@ -1,5 +1,7 @@
 ﻿using AccesoDatos;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Dominio
 {
@@ -17,6 +19,7 @@ namespace Dominio
         public string Rol { get; set; } = string.Empty;
         public string Cargo { get; set; } = ""; 
         public byte[] Foto { get; set; }
+
     }
 
     public class ResultadoActivo
@@ -25,8 +28,11 @@ namespace Dominio
         public string Mensaje { get; set; } = "";
 
     }
-
-
+    public class ResultadoColaborador
+    {
+        public bool Exitoso { get; set; }
+        public string Mensaje { get; set; } = "";
+    }
 
     public class UsuarioDominio
     {
@@ -56,6 +62,7 @@ namespace Dominio
                     resultado.Intentos = _intentosFallidos;
                     return resultado;
                 }
+                string hashValidar = EncriptarTextoSHA256(passwordHash);
 
                 bool credencialesValidas = _accesoDatos.ValidarCredenciales(correo, passwordHash);
 
@@ -94,6 +101,20 @@ namespace Dominio
             }
 
             return resultado;
+        }
+
+        private string EncriptarTextoSHA256(string textoPlano)
+        {
+            using (System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(textoPlano));
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+                return sb.ToString();
+            }
         }
 
         public class ActivosDominio
@@ -279,6 +300,113 @@ namespace Dominio
         public bool Exitoso { get; set; }
         public int AsignacionID { get; set; }
         public string Mensaje { get; set; } = string.Empty;
+    }
+
+    public class AuditoriaDominio
+    {
+        private readonly AuditoriaAccesoDatos _datos = new AuditoriaAccesoDatos();
+
+        public DataTable ListarLogsAuditoria(DateTime desde, DateTime hasta)
+        {
+            // Regla de Validación de consistencia cronológica
+            if (desde > hasta)
+            {
+                throw new ArgumentException("La fecha de inicio ('Desde') no puede ser posterior a la fecha de fin ('Hasta').");
+            }
+
+            return _datos.ObtenerLogs(desde, hasta);
+        }
+    }
+
+    public class ColaboradorDominio
+    {
+        private readonly ColaboradorAccesoDatos _accesoDatos = new ColaboradorAccesoDatos();
+
+        public ResultadoColaborador RegistrarColaborador(
+            string documentoIdentidad, string nombres, string apellidos,
+            string correoCorporativo, int departamentoId, int ubicacionId,
+            DateTime fechaIngreso, string estado, int perfilId,
+            string usuarioApp, string password, byte[] foto, string cargo)
+        {
+            var resultado = new ResultadoColaborador();
+
+            try
+            {
+                // Validaciones de reglas de negocio prioritarias
+                if (string.IsNullOrWhiteSpace(documentoIdentidad) || string.IsNullOrWhiteSpace(nombres) || string.IsNullOrWhiteSpace(apellidos))
+                {
+                    resultado.Exitoso = false;
+                    resultado.Mensaje = "Cédula, Nombres y Apellidos son campos estrictamente obligatorios.";
+                    return resultado;
+                }
+
+                if (string.IsNullOrWhiteSpace(usuarioApp) || string.IsNullOrWhiteSpace(password))
+                {
+                    resultado.Exitoso = false;
+                    resultado.Mensaje = "Las credenciales de acceso de la aplicación (Usuario y Contraseña) son obligatorias.";
+                    return resultado;
+                }
+
+                if (departamentoId <= 0 || ubicacionId <= 0 || perfilId <= 0)
+                {
+                    resultado.Exitoso = false;
+                    resultado.Mensaje = "Debe seleccionar un Departamento, Ubicación y Perfil válidos.";
+                    return resultado;
+                }
+
+                // Encriptación SHA256 de la contraseña para que coincida con la conversión varbinary del login
+                string passwordHash = EncriptarTextoSHA256(password);
+
+                bool ok = _accesoDatos.InsertarColaborador(
+                    documentoIdentidad, nombres, apellidos, correoCorporativo,
+                    departamentoId, ubicacionId, fechaIngreso, estado, perfilId,
+                    usuarioApp, passwordHash, foto, cargo
+                );
+
+                resultado.Exitoso = ok;
+                resultado.Mensaje = ok ? "Colaborador registrado exitosamente en el sistema." : "No se pudo completar el registro del colaborador.";
+            }
+            catch (Exception ex)
+            {
+                resultado.Exitoso = false;
+                resultado.Mensaje = $"ERROR en Capa de Dominio: {ex.Message}";
+            }
+
+            return resultado;
+
+
+        }
+
+        private string EncriptarTextoSHA256(string textoPlano)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(textoPlano));
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
+
+        // ... (Tu método RegistrarColaborador existente se mantiene aquí) ...
+
+        public DataTable ListarDepartamentos()
+        {
+            return _accesoDatos.ObtenerDepartamentos();
+        }
+
+        public DataTable ListarUbicaciones()
+        {
+            return _accesoDatos.ObtenerUbicaciones();
+        }
+
+        public DataTable ListarPerfiles()
+        {
+            return _accesoDatos.ObtenerPerfiles();
+        }
     }
 
 

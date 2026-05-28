@@ -37,7 +37,7 @@
             BtnEstadistica = new Button();
             pictureBox1 = new PictureBox();
             Btn_Logout = new Button();
-            button5 = new Button();
+            Log_Viewer = new Button();
             button4 = new Button();
             button3 = new Button();
             BtnAsignaciones = new Button();
@@ -52,41 +52,16 @@
             CloseForm = new Button();
             PnlMain = new Panel();
             PnlAsignaciones = new Panel();
+            lblCo = new Label();
             cmbTipoActivo = new ComboBox();
             BtnGuardarAsignacion = new Button();
             BtnCancelarAsignacion = new Button();
-            lblColaboradorSeleccionado = new Label();
             lblActivoSeleccionado = new Label();
             txtObservacionesAsignacion = new TextBox();
             txtBuscarColaborador = new TextBox();
             dtpFechaAsignacion = new DateTimePicker();
             cmbActivos = new ComboBox();
             cmbColaboradores = new ComboBox();
-            PnlEstadisticas = new Panel();
-            lblFecha1 = new Label();
-            label1 = new Label();
-            lblRecientes = new Label();
-            dgvRecientes = new DataGridView();
-            PnlTotalActivos = new Panel();
-            label11 = new Label();
-            label10 = new Label();
-            label7 = new Label();
-            pictureBox5 = new PictureBox();
-            label6 = new Label();
-            lblAsignados = new Label();
-            pictureBox4 = new PictureBox();
-            lblTotal = new Label();
-            PnlEnBodega = new Panel();
-            label9 = new Label();
-            label5 = new Label();
-            pictureBox3 = new PictureBox();
-            lblBodega = new Label();
-            PnlMantenimiento = new Panel();
-            label8 = new Label();
-            label4 = new Label();
-            pictureBox2 = new PictureBox();
-            lblMant = new Label();
-            lblSaludo = new Label();
             PnlAgregarActivo = new Panel();
             BtnGuardarActivo = new Button();
             BtnCancelarActivo = new Button();
@@ -131,6 +106,34 @@
             lblMarca = new Label();
             txtMarca = new TextBox();
             label3 = new Label();
+            PnlEstadisticas = new Panel();
+            lblFecha1 = new Label();
+            label1 = new Label();
+            lblRecientes = new Label();
+            dgvRecientes = new DataGridView();
+            PnlTotalActivos = new Panel();
+            label11 = new Label();
+            label10 = new Label();
+            label7 = new Label();
+            pictureBox5 = new PictureBox();
+            label6 = new Label();
+            lblAsignados = new Label();
+            pictureBox4 = new PictureBox();
+            lblTotal = new Label();
+            PnlEnBodega = new Panel();
+            label9 = new Label();
+            label5 = new Label();
+            pictureBox3 = new PictureBox();
+            lblBodega = new Label();
+            PnlMantenimiento = new Panel();
+            label8 = new Label();
+            label4 = new Label();
+            pictureBox2 = new PictureBox();
+            lblMant = new Label();
+            lblSaludo = new Label();
+            menuStrip1 = new MenuStrip();
+            menúDeFormulariosToolStripMenuItem = new ToolStripMenuItem();
+            vistaDeActivosToolStripMenuItem = new ToolStripMenuItem();
             PnlSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             PnlProfile.SuspendLayout();
@@ -141,6 +144,10 @@
             ((System.ComponentModel.ISupportInitialize)PictureBPhoto).BeginInit();
             PnlMain.SuspendLayout();
             PnlAsignaciones.SuspendLayout();
+            PnlAgregarActivo.SuspendLayout();
+            tabControlActivo.SuspendLayout();
+            tabInfoBase.SuspendLayout();
+            tabHardware.SuspendLayout();
             PnlEstadisticas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecientes).BeginInit();
             PnlTotalActivos.SuspendLayout();
@@ -150,10 +157,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             PnlMantenimiento.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            PnlAgregarActivo.SuspendLayout();
-            tabControlActivo.SuspendLayout();
-            tabInfoBase.SuspendLayout();
-            tabHardware.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // username
@@ -186,7 +190,7 @@
             PnlSidebar.Controls.Add(BtnEstadistica);
             PnlSidebar.Controls.Add(pictureBox1);
             PnlSidebar.Controls.Add(Btn_Logout);
-            PnlSidebar.Controls.Add(button5);
+            PnlSidebar.Controls.Add(Log_Viewer);
             PnlSidebar.Controls.Add(button4);
             PnlSidebar.Controls.Add(button3);
             PnlSidebar.Controls.Add(BtnAsignaciones);
@@ -204,7 +208,7 @@
             BtnEstadistica.ForeColor = Color.White;
             BtnEstadistica.Location = new Point(-2, 323);
             BtnEstadistica.Name = "BtnEstadistica";
-            BtnEstadistica.Size = new Size(318, 56);
+            BtnEstadistica.Size = new Size(318, 58);
             BtnEstadistica.TabIndex = 7;
             BtnEstadistica.Text = "Inicio";
             BtnEstadistica.UseVisualStyleBackColor = false;
@@ -232,24 +236,25 @@
             Btn_Logout.UseVisualStyleBackColor = false;
             Btn_Logout.Click += Btn_Logout_Click;
             // 
-            // button5
+            // Log_Viewer
             // 
-            button5.BackColor = Color.FromArgb(7, 9, 40);
-            button5.ForeColor = Color.White;
-            button5.Location = new Point(0, 583);
-            button5.Name = "button5";
-            button5.Size = new Size(318, 56);
-            button5.TabIndex = 5;
-            button5.Text = "Seguridad";
-            button5.UseVisualStyleBackColor = false;
+            Log_Viewer.BackColor = Color.FromArgb(7, 9, 40);
+            Log_Viewer.ForeColor = Color.White;
+            Log_Viewer.Location = new Point(0, 593);
+            Log_Viewer.Name = "Log_Viewer";
+            Log_Viewer.Size = new Size(318, 58);
+            Log_Viewer.TabIndex = 5;
+            Log_Viewer.Text = "Auditoría";
+            Log_Viewer.UseVisualStyleBackColor = false;
+            Log_Viewer.Click += Log_Viewer_Click;
             // 
             // button4
             // 
             button4.BackColor = Color.FromArgb(7, 9, 40);
             button4.ForeColor = Color.White;
-            button4.Location = new Point(0, 531);
+            button4.Location = new Point(0, 539);
             button4.Name = "button4";
-            button4.Size = new Size(318, 56);
+            button4.Size = new Size(318, 58);
             button4.TabIndex = 4;
             button4.Text = "Departamentos";
             button4.UseVisualStyleBackColor = false;
@@ -258,9 +263,9 @@
             // 
             button3.BackColor = Color.FromArgb(7, 9, 40);
             button3.ForeColor = Color.White;
-            button3.Location = new Point(0, 479);
+            button3.Location = new Point(0, 485);
             button3.Name = "button3";
-            button3.Size = new Size(318, 56);
+            button3.Size = new Size(318, 58);
             button3.TabIndex = 3;
             button3.Text = "Colaboradores";
             button3.UseVisualStyleBackColor = false;
@@ -269,9 +274,9 @@
             // 
             BtnAsignaciones.BackColor = Color.FromArgb(7, 9, 40);
             BtnAsignaciones.ForeColor = Color.White;
-            BtnAsignaciones.Location = new Point(0, 427);
+            BtnAsignaciones.Location = new Point(0, 431);
             BtnAsignaciones.Name = "BtnAsignaciones";
-            BtnAsignaciones.Size = new Size(318, 56);
+            BtnAsignaciones.Size = new Size(318, 58);
             BtnAsignaciones.TabIndex = 2;
             BtnAsignaciones.Text = "Asignaciones";
             BtnAsignaciones.UseVisualStyleBackColor = false;
@@ -281,9 +286,9 @@
             // 
             BtnAgregarActivo.BackColor = Color.FromArgb(7, 9, 40);
             BtnAgregarActivo.ForeColor = Color.White;
-            BtnAgregarActivo.Location = new Point(0, 375);
+            BtnAgregarActivo.Location = new Point(0, 377);
             BtnAgregarActivo.Name = "BtnAgregarActivo";
-            BtnAgregarActivo.Size = new Size(318, 56);
+            BtnAgregarActivo.Size = new Size(318, 58);
             BtnAgregarActivo.TabIndex = 1;
             BtnAgregarActivo.Text = "Nuevo Activo";
             BtnAgregarActivo.UseVisualStyleBackColor = false;
@@ -379,8 +384,8 @@
             // PnlMain
             // 
             PnlMain.Controls.Add(PnlAsignaciones);
-            PnlMain.Controls.Add(PnlEstadisticas);
             PnlMain.Controls.Add(PnlAgregarActivo);
+            PnlMain.Controls.Add(PnlEstadisticas);
             PnlMain.Location = new Point(334, 56);
             PnlMain.Name = "PnlMain";
             PnlMain.Size = new Size(1394, 1098);
@@ -388,10 +393,10 @@
             // 
             // PnlAsignaciones
             // 
+            PnlAsignaciones.Controls.Add(lblCo);
             PnlAsignaciones.Controls.Add(cmbTipoActivo);
             PnlAsignaciones.Controls.Add(BtnGuardarAsignacion);
             PnlAsignaciones.Controls.Add(BtnCancelarAsignacion);
-            PnlAsignaciones.Controls.Add(lblColaboradorSeleccionado);
             PnlAsignaciones.Controls.Add(lblActivoSeleccionado);
             PnlAsignaciones.Controls.Add(txtObservacionesAsignacion);
             PnlAsignaciones.Controls.Add(txtBuscarColaborador);
@@ -404,94 +409,566 @@
             PnlAsignaciones.Size = new Size(1394, 1098);
             PnlAsignaciones.TabIndex = 2;
             // 
+            // lblCo
+            // 
+            lblCo.AutoSize = true;
+            lblCo.BackColor = Color.Transparent;
+            lblCo.Font = new Font("Segoe UI", 15.8571434F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCo.ForeColor = Color.White;
+            lblCo.Location = new Point(29, 38);
+            lblCo.Name = "lblCo";
+            lblCo.Size = new Size(460, 150);
+            lblCo.TabIndex = 11;
+            lblCo.Text = "Asignar nuevo inventario\r\na Colaborador\r\n\r\n";
+            // 
             // cmbTipoActivo
             // 
+            cmbTipoActivo.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
             cmbTipoActivo.FormattingEnabled = true;
-            cmbTipoActivo.Location = new Point(141, 295);
+            cmbTipoActivo.Location = new Point(471, 259);
             cmbTipoActivo.Name = "cmbTipoActivo";
-            cmbTipoActivo.Size = new Size(441, 38);
+            cmbTipoActivo.Size = new Size(441, 39);
             cmbTipoActivo.TabIndex = 10;
             cmbTipoActivo.SelectedIndexChanged += cmbTipoActivo_SelectedIndexChanged;
             // 
             // BtnGuardarAsignacion
             // 
-            BtnGuardarAsignacion.Location = new Point(469, 919);
+            BtnGuardarAsignacion.BackColor = Color.FromArgb(244, 154, 36);
+            BtnGuardarAsignacion.FlatStyle = FlatStyle.Flat;
+            BtnGuardarAsignacion.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            BtnGuardarAsignacion.ForeColor = Color.White;
+            BtnGuardarAsignacion.Location = new Point(705, 952);
             BtnGuardarAsignacion.Name = "BtnGuardarAsignacion";
-            BtnGuardarAsignacion.Size = new Size(131, 40);
+            BtnGuardarAsignacion.Size = new Size(315, 58);
             BtnGuardarAsignacion.TabIndex = 9;
-            BtnGuardarAsignacion.Text = "button2";
-            BtnGuardarAsignacion.UseVisualStyleBackColor = true;
+            BtnGuardarAsignacion.Text = "Asignar Activo";
+            BtnGuardarAsignacion.UseVisualStyleBackColor = false;
             BtnGuardarAsignacion.Click += BtnGuardarAsignacion_Click;
             // 
             // BtnCancelarAsignacion
             // 
-            BtnCancelarAsignacion.Location = new Point(236, 920);
+            BtnCancelarAsignacion.BackColor = Color.FromArgb(244, 154, 36);
+            BtnCancelarAsignacion.FlatStyle = FlatStyle.Flat;
+            BtnCancelarAsignacion.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            BtnCancelarAsignacion.ForeColor = Color.White;
+            BtnCancelarAsignacion.Location = new Point(364, 952);
             BtnCancelarAsignacion.Name = "BtnCancelarAsignacion";
-            BtnCancelarAsignacion.Size = new Size(131, 40);
+            BtnCancelarAsignacion.Size = new Size(315, 58);
             BtnCancelarAsignacion.TabIndex = 8;
-            BtnCancelarAsignacion.Text = "button1";
-            BtnCancelarAsignacion.UseVisualStyleBackColor = true;
+            BtnCancelarAsignacion.Text = "Cancelar";
+            BtnCancelarAsignacion.UseVisualStyleBackColor = false;
             BtnCancelarAsignacion.Click += BtnCancelarAsignacion_Click;
-            // 
-            // lblColaboradorSeleccionado
-            // 
-            lblColaboradorSeleccionado.AutoSize = true;
-            lblColaboradorSeleccionado.BackColor = Color.Red;
-            lblColaboradorSeleccionado.Location = new Point(829, 146);
-            lblColaboradorSeleccionado.Name = "lblColaboradorSeleccionado";
-            lblColaboradorSeleccionado.Size = new Size(79, 30);
-            lblColaboradorSeleccionado.TabIndex = 7;
-            lblColaboradorSeleccionado.Text = "label13";
             // 
             // lblActivoSeleccionado
             // 
             lblActivoSeleccionado.AutoSize = true;
-            lblActivoSeleccionado.BackColor = Color.Red;
-            lblActivoSeleccionado.Location = new Point(141, 136);
+            lblActivoSeleccionado.BackColor = Color.Transparent;
+            lblActivoSeleccionado.Font = new Font("Segoe UI Black", 15.8571434F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblActivoSeleccionado.ForeColor = Color.White;
+            lblActivoSeleccionado.Location = new Point(893, 26);
             lblActivoSeleccionado.Name = "lblActivoSeleccionado";
-            lblActivoSeleccionado.Size = new Size(79, 30);
+            lblActivoSeleccionado.Size = new Size(481, 100);
             lblActivoSeleccionado.TabIndex = 6;
-            lblActivoSeleccionado.Text = "label12";
+            lblActivoSeleccionado.Text = "Asignar nuevo inventario\r\na Colaborador\r\n";
+            lblActivoSeleccionado.Visible = false;
             // 
             // txtObservacionesAsignacion
             // 
-            txtObservacionesAsignacion.Location = new Point(829, 372);
+            txtObservacionesAsignacion.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            txtObservacionesAsignacion.Location = new Point(471, 489);
             txtObservacionesAsignacion.Name = "txtObservacionesAsignacion";
-            txtObservacionesAsignacion.Size = new Size(397, 35);
+            txtObservacionesAsignacion.Size = new Size(441, 38);
             txtObservacionesAsignacion.TabIndex = 5;
             // 
             // txtBuscarColaborador
             // 
-            txtBuscarColaborador.Location = new Point(829, 215);
+            txtBuscarColaborador.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            txtBuscarColaborador.Location = new Point(471, 565);
             txtBuscarColaborador.Name = "txtBuscarColaborador";
-            txtBuscarColaborador.Size = new Size(397, 35);
+            txtBuscarColaborador.Size = new Size(441, 38);
             txtBuscarColaborador.TabIndex = 4;
+            txtBuscarColaborador.Visible = false;
             txtBuscarColaborador.TextChanged += txtBuscarColaborador_TextChanged;
             // 
             // dtpFechaAsignacion
             // 
-            dtpFechaAsignacion.Location = new Point(141, 455);
+            dtpFechaAsignacion.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            dtpFechaAsignacion.Location = new Point(471, 413);
             dtpFechaAsignacion.Name = "dtpFechaAsignacion";
-            dtpFechaAsignacion.Size = new Size(441, 35);
+            dtpFechaAsignacion.Size = new Size(441, 38);
             dtpFechaAsignacion.TabIndex = 2;
             // 
             // cmbActivos
             // 
+            cmbActivos.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
             cmbActivos.FormattingEnabled = true;
-            cmbActivos.Location = new Point(141, 369);
+            cmbActivos.Location = new Point(471, 336);
             cmbActivos.Name = "cmbActivos";
-            cmbActivos.Size = new Size(441, 38);
+            cmbActivos.Size = new Size(441, 39);
             cmbActivos.TabIndex = 1;
             cmbActivos.SelectedIndexChanged += cmbActivos_SelectedIndexChanged;
             // 
             // cmbColaboradores
             // 
+            cmbColaboradores.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
             cmbColaboradores.FormattingEnabled = true;
-            cmbColaboradores.Location = new Point(829, 285);
+            cmbColaboradores.Location = new Point(956, 87);
             cmbColaboradores.Name = "cmbColaboradores";
-            cmbColaboradores.Size = new Size(397, 38);
+            cmbColaboradores.Size = new Size(397, 39);
             cmbColaboradores.TabIndex = 0;
+            cmbColaboradores.Visible = false;
             cmbColaboradores.SelectedIndexChanged += cmbColaboradores_SelectedIndexChanged;
+            // 
+            // PnlAgregarActivo
+            // 
+            PnlAgregarActivo.Controls.Add(BtnGuardarActivo);
+            PnlAgregarActivo.Controls.Add(BtnCancelarActivo);
+            PnlAgregarActivo.Controls.Add(tabControlActivo);
+            PnlAgregarActivo.Location = new Point(906, 208);
+            PnlAgregarActivo.Name = "PnlAgregarActivo";
+            PnlAgregarActivo.Size = new Size(369, 419);
+            PnlAgregarActivo.TabIndex = 0;
+            PnlAgregarActivo.Visible = false;
+            // 
+            // BtnGuardarActivo
+            // 
+            BtnGuardarActivo.Location = new Point(690, 1042);
+            BtnGuardarActivo.Name = "BtnGuardarActivo";
+            BtnGuardarActivo.Size = new Size(706, 56);
+            BtnGuardarActivo.TabIndex = 2;
+            BtnGuardarActivo.Text = "Guardar";
+            BtnGuardarActivo.UseVisualStyleBackColor = true;
+            BtnGuardarActivo.Click += BtnGuardarActivo_Click;
+            // 
+            // BtnCancelarActivo
+            // 
+            BtnCancelarActivo.Location = new Point(0, 1042);
+            BtnCancelarActivo.Name = "BtnCancelarActivo";
+            BtnCancelarActivo.Size = new Size(690, 56);
+            BtnCancelarActivo.TabIndex = 1;
+            BtnCancelarActivo.Text = "Cancelar";
+            BtnCancelarActivo.UseVisualStyleBackColor = true;
+            BtnCancelarActivo.Click += BtnCancelarActivo_Click;
+            // 
+            // tabControlActivo
+            // 
+            tabControlActivo.Appearance = TabAppearance.FlatButtons;
+            tabControlActivo.Controls.Add(tabInfoBase);
+            tabControlActivo.Controls.Add(tabHardware);
+            tabControlActivo.Location = new Point(3, 3);
+            tabControlActivo.Name = "tabControlActivo";
+            tabControlActivo.SelectedIndex = 0;
+            tabControlActivo.Size = new Size(1391, 1043);
+            tabControlActivo.TabIndex = 0;
+            // 
+            // tabInfoBase
+            // 
+            tabInfoBase.BackColor = Color.White;
+            tabInfoBase.Controls.Add(lblFecha);
+            tabInfoBase.Controls.Add(lblEstado);
+            tabInfoBase.Controls.Add(cmbEstadoOperativo);
+            tabInfoBase.Controls.Add(lblCosto);
+            tabInfoBase.Controls.Add(lblProveedor);
+            tabInfoBase.Controls.Add(cmbProveedor);
+            tabInfoBase.Controls.Add(lblCategoria);
+            tabInfoBase.Controls.Add(cmbCategoria);
+            tabInfoBase.Controls.Add(label2);
+            tabInfoBase.Controls.Add(txtCosto);
+            tabInfoBase.Controls.Add(dtpFechaAdquisicion);
+            tabInfoBase.Controls.Add(lblUbicacion);
+            tabInfoBase.Controls.Add(cmbUbicacion);
+            tabInfoBase.Location = new Point(4, 42);
+            tabInfoBase.Name = "tabInfoBase";
+            tabInfoBase.Padding = new Padding(3);
+            tabInfoBase.Size = new Size(1383, 997);
+            tabInfoBase.TabIndex = 0;
+            tabInfoBase.Text = "Información Base";
+            // 
+            // lblFecha
+            // 
+            lblFecha.AutoSize = true;
+            lblFecha.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFecha.Location = new Point(734, 415);
+            lblFecha.Name = "lblFecha";
+            lblFecha.Size = new Size(77, 32);
+            lblFecha.TabIndex = 9;
+            lblFecha.Text = "Fecha";
+            // 
+            // lblEstado
+            // 
+            lblEstado.AutoSize = true;
+            lblEstado.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEstado.Location = new Point(734, 276);
+            lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(201, 32);
+            lblEstado.TabIndex = 12;
+            lblEstado.Text = "Estado Operativo";
+            // 
+            // cmbEstadoOperativo
+            // 
+            cmbEstadoOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            cmbEstadoOperativo.FormattingEnabled = true;
+            cmbEstadoOperativo.Location = new Point(734, 315);
+            cmbEstadoOperativo.Name = "cmbEstadoOperativo";
+            cmbEstadoOperativo.Size = new Size(462, 40);
+            cmbEstadoOperativo.TabIndex = 11;
+            // 
+            // lblCosto
+            // 
+            lblCosto.AutoSize = true;
+            lblCosto.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCosto.Location = new Point(734, 580);
+            lblCosto.Name = "lblCosto";
+            lblCosto.Size = new Size(185, 32);
+            lblCosto.TabIndex = 10;
+            lblCosto.Text = "Costo de Activo";
+            // 
+            // lblProveedor
+            // 
+            lblProveedor.AutoSize = true;
+            lblProveedor.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblProveedor.Location = new Point(136, 580);
+            lblProveedor.Name = "lblProveedor";
+            lblProveedor.Size = new Size(126, 32);
+            lblProveedor.TabIndex = 8;
+            lblProveedor.Text = "Proveedor";
+            // 
+            // cmbProveedor
+            // 
+            cmbProveedor.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            cmbProveedor.FormattingEnabled = true;
+            cmbProveedor.Location = new Point(136, 620);
+            cmbProveedor.Name = "cmbProveedor";
+            cmbProveedor.Size = new Size(462, 40);
+            cmbProveedor.TabIndex = 7;
+            // 
+            // lblCategoria
+            // 
+            lblCategoria.AutoSize = true;
+            lblCategoria.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCategoria.Location = new Point(136, 276);
+            lblCategoria.Name = "lblCategoria";
+            lblCategoria.Size = new Size(120, 32);
+            lblCategoria.TabIndex = 6;
+            lblCategoria.Text = "Categoría";
+            // 
+            // cmbCategoria
+            // 
+            cmbCategoria.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            cmbCategoria.FormattingEnabled = true;
+            cmbCategoria.Location = new Point(136, 315);
+            cmbCategoria.Name = "cmbCategoria";
+            cmbCategoria.Size = new Size(462, 40);
+            cmbCategoria.TabIndex = 5;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.FromArgb(7, 4, 40);
+            label2.Location = new Point(5, 6);
+            label2.Name = "label2";
+            label2.Size = new Size(386, 38);
+            label2.TabIndex = 4;
+            label2.Text = "Información Base del Activo";
+            // 
+            // txtCosto
+            // 
+            txtCosto.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtCosto.Location = new Point(734, 620);
+            txtCosto.Name = "txtCosto";
+            txtCosto.Size = new Size(462, 39);
+            txtCosto.TabIndex = 3;
+            // 
+            // dtpFechaAdquisicion
+            // 
+            dtpFechaAdquisicion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            dtpFechaAdquisicion.Location = new Point(734, 455);
+            dtpFechaAdquisicion.Name = "dtpFechaAdquisicion";
+            dtpFechaAdquisicion.Size = new Size(462, 39);
+            dtpFechaAdquisicion.TabIndex = 2;
+            // 
+            // lblUbicacion
+            // 
+            lblUbicacion.AutoSize = true;
+            lblUbicacion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUbicacion.Location = new Point(136, 415);
+            lblUbicacion.Name = "lblUbicacion";
+            lblUbicacion.Size = new Size(120, 32);
+            lblUbicacion.TabIndex = 1;
+            lblUbicacion.Text = "Ubicación";
+            // 
+            // cmbUbicacion
+            // 
+            cmbUbicacion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            cmbUbicacion.FormattingEnabled = true;
+            cmbUbicacion.Location = new Point(136, 455);
+            cmbUbicacion.Name = "cmbUbicacion";
+            cmbUbicacion.Size = new Size(462, 40);
+            cmbUbicacion.TabIndex = 0;
+            // 
+            // tabHardware
+            // 
+            tabHardware.BackColor = Color.White;
+            tabHardware.Controls.Add(lblResolucion);
+            tabHardware.Controls.Add(txtResolucionPantalla);
+            tabHardware.Controls.Add(lblSistemaOperativo);
+            tabHardware.Controls.Add(txtSistemaOperativo);
+            tabHardware.Controls.Add(lblAlmacenamiento2);
+            tabHardware.Controls.Add(txtAlmacenamiento2);
+            tabHardware.Controls.Add(lblAlmacenamiento1);
+            tabHardware.Controls.Add(txtAlmacenamiento1);
+            tabHardware.Controls.Add(lblMemoriaRAMlblMemoriaRAM);
+            tabHardware.Controls.Add(txtMemoriaRAM);
+            tabHardware.Controls.Add(lblTarjetaGrafica);
+            tabHardware.Controls.Add(txtTarjetaGrafica);
+            tabHardware.Controls.Add(lblProcesador);
+            tabHardware.Controls.Add(txtProcesador);
+            tabHardware.Controls.Add(lblIP);
+            tabHardware.Controls.Add(txtDireccionIP);
+            tabHardware.Controls.Add(lblMAC);
+            tabHardware.Controls.Add(txtDireccionMAC);
+            tabHardware.Controls.Add(lblNumeroSerie);
+            tabHardware.Controls.Add(txtNumeroSerie);
+            tabHardware.Controls.Add(lblModelo);
+            tabHardware.Controls.Add(txtModelo);
+            tabHardware.Controls.Add(lblMarca);
+            tabHardware.Controls.Add(txtMarca);
+            tabHardware.Controls.Add(label3);
+            tabHardware.Location = new Point(4, 42);
+            tabHardware.Name = "tabHardware";
+            tabHardware.Padding = new Padding(3);
+            tabHardware.Size = new Size(1383, 997);
+            tabHardware.TabIndex = 1;
+            tabHardware.Text = "Detalles de Hardware";
+            // 
+            // lblResolucion
+            // 
+            lblResolucion.AutoSize = true;
+            lblResolucion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblResolucion.Location = new Point(739, 746);
+            lblResolucion.Name = "lblResolucion";
+            lblResolucion.Size = new Size(258, 32);
+            lblResolucion.TabIndex = 34;
+            lblResolucion.Text = "Resolución de Pantalla";
+            // 
+            // txtResolucionPantalla
+            // 
+            txtResolucionPantalla.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtResolucionPantalla.Location = new Point(739, 784);
+            txtResolucionPantalla.Name = "txtResolucionPantalla";
+            txtResolucionPantalla.Size = new Size(462, 39);
+            txtResolucionPantalla.TabIndex = 33;
+            // 
+            // lblSistemaOperativo
+            // 
+            lblSistemaOperativo.AutoSize = true;
+            lblSistemaOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSistemaOperativo.Location = new Point(739, 620);
+            lblSistemaOperativo.Name = "lblSistemaOperativo";
+            lblSistemaOperativo.Size = new Size(214, 32);
+            lblSistemaOperativo.TabIndex = 32;
+            lblSistemaOperativo.Text = "Sistema Operativo";
+            // 
+            // txtSistemaOperativo
+            // 
+            txtSistemaOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtSistemaOperativo.Location = new Point(739, 658);
+            txtSistemaOperativo.Name = "txtSistemaOperativo";
+            txtSistemaOperativo.Size = new Size(462, 39);
+            txtSistemaOperativo.TabIndex = 31;
+            // 
+            // lblAlmacenamiento2
+            // 
+            lblAlmacenamiento2.AutoSize = true;
+            lblAlmacenamiento2.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAlmacenamiento2.Location = new Point(739, 494);
+            lblAlmacenamiento2.Name = "lblAlmacenamiento2";
+            lblAlmacenamiento2.Size = new Size(234, 32);
+            lblAlmacenamiento2.TabIndex = 30;
+            lblAlmacenamiento2.Text = "Almacenamiento [2]";
+            // 
+            // txtAlmacenamiento2
+            // 
+            txtAlmacenamiento2.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtAlmacenamiento2.Location = new Point(739, 532);
+            txtAlmacenamiento2.Name = "txtAlmacenamiento2";
+            txtAlmacenamiento2.Size = new Size(462, 39);
+            txtAlmacenamiento2.TabIndex = 29;
+            // 
+            // lblAlmacenamiento1
+            // 
+            lblAlmacenamiento1.AutoSize = true;
+            lblAlmacenamiento1.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAlmacenamiento1.Location = new Point(739, 369);
+            lblAlmacenamiento1.Name = "lblAlmacenamiento1";
+            lblAlmacenamiento1.Size = new Size(231, 32);
+            lblAlmacenamiento1.TabIndex = 28;
+            lblAlmacenamiento1.Text = "Almacenamiento [1]";
+            // 
+            // txtAlmacenamiento1
+            // 
+            txtAlmacenamiento1.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtAlmacenamiento1.Location = new Point(739, 407);
+            txtAlmacenamiento1.Name = "txtAlmacenamiento1";
+            txtAlmacenamiento1.Size = new Size(462, 39);
+            txtAlmacenamiento1.TabIndex = 27;
+            // 
+            // lblMemoriaRAMlblMemoriaRAM
+            // 
+            lblMemoriaRAMlblMemoriaRAM.AutoSize = true;
+            lblMemoriaRAMlblMemoriaRAM.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMemoriaRAMlblMemoriaRAM.Location = new Point(739, 244);
+            lblMemoriaRAMlblMemoriaRAM.Name = "lblMemoriaRAMlblMemoriaRAM";
+            lblMemoriaRAMlblMemoriaRAM.Size = new Size(172, 32);
+            lblMemoriaRAMlblMemoriaRAM.TabIndex = 26;
+            lblMemoriaRAMlblMemoriaRAM.Text = "Memoria RAM";
+            // 
+            // txtMemoriaRAM
+            // 
+            txtMemoriaRAM.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtMemoriaRAM.Location = new Point(739, 281);
+            txtMemoriaRAM.Name = "txtMemoriaRAM";
+            txtMemoriaRAM.Size = new Size(462, 39);
+            txtMemoriaRAM.TabIndex = 25;
+            // 
+            // lblTarjetaGrafica
+            // 
+            lblTarjetaGrafica.AutoSize = true;
+            lblTarjetaGrafica.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTarjetaGrafica.Location = new Point(739, 116);
+            lblTarjetaGrafica.Name = "lblTarjetaGrafica";
+            lblTarjetaGrafica.Size = new Size(169, 32);
+            lblTarjetaGrafica.TabIndex = 24;
+            lblTarjetaGrafica.Text = "Tarjeta gráfica";
+            // 
+            // txtTarjetaGrafica
+            // 
+            txtTarjetaGrafica.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtTarjetaGrafica.Location = new Point(739, 156);
+            txtTarjetaGrafica.Name = "txtTarjetaGrafica";
+            txtTarjetaGrafica.Size = new Size(462, 39);
+            txtTarjetaGrafica.TabIndex = 23;
+            // 
+            // lblProcesador
+            // 
+            lblProcesador.AutoSize = true;
+            lblProcesador.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblProcesador.Location = new Point(176, 746);
+            lblProcesador.Name = "lblProcesador";
+            lblProcesador.Size = new Size(135, 32);
+            lblProcesador.TabIndex = 22;
+            lblProcesador.Text = "Procesador";
+            // 
+            // txtProcesador
+            // 
+            txtProcesador.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtProcesador.Location = new Point(176, 785);
+            txtProcesador.Name = "txtProcesador";
+            txtProcesador.Size = new Size(462, 39);
+            txtProcesador.TabIndex = 21;
+            // 
+            // lblIP
+            // 
+            lblIP.AutoSize = true;
+            lblIP.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIP.Location = new Point(176, 619);
+            lblIP.Name = "lblIP";
+            lblIP.Size = new Size(143, 32);
+            lblIP.TabIndex = 20;
+            lblIP.Text = "Dirección IP";
+            // 
+            // txtDireccionIP
+            // 
+            txtDireccionIP.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtDireccionIP.Location = new Point(176, 657);
+            txtDireccionIP.Name = "txtDireccionIP";
+            txtDireccionIP.Size = new Size(462, 39);
+            txtDireccionIP.TabIndex = 19;
+            // 
+            // lblMAC
+            // 
+            lblMAC.AutoSize = true;
+            lblMAC.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMAC.Location = new Point(176, 491);
+            lblMAC.Name = "lblMAC";
+            lblMAC.Size = new Size(175, 32);
+            lblMAC.TabIndex = 18;
+            lblMAC.Text = "Dirección MAC";
+            // 
+            // txtDireccionMAC
+            // 
+            txtDireccionMAC.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtDireccionMAC.Location = new Point(176, 530);
+            txtDireccionMAC.Name = "txtDireccionMAC";
+            txtDireccionMAC.Size = new Size(462, 39);
+            txtDireccionMAC.TabIndex = 17;
+            // 
+            // lblNumeroSerie
+            // 
+            lblNumeroSerie.AutoSize = true;
+            lblNumeroSerie.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNumeroSerie.Location = new Point(176, 364);
+            lblNumeroSerie.Name = "lblNumeroSerie";
+            lblNumeroSerie.Size = new Size(195, 32);
+            lblNumeroSerie.TabIndex = 16;
+            lblNumeroSerie.Text = "Numero de serie";
+            // 
+            // txtNumeroSerie
+            // 
+            txtNumeroSerie.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtNumeroSerie.Location = new Point(176, 402);
+            txtNumeroSerie.Name = "txtNumeroSerie";
+            txtNumeroSerie.Size = new Size(462, 39);
+            txtNumeroSerie.TabIndex = 15;
+            // 
+            // lblModelo
+            // 
+            lblModelo.AutoSize = true;
+            lblModelo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblModelo.Location = new Point(176, 238);
+            lblModelo.Name = "lblModelo";
+            lblModelo.Size = new Size(97, 32);
+            lblModelo.TabIndex = 14;
+            lblModelo.Text = "Modelo";
+            // 
+            // txtModelo
+            // 
+            txtModelo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtModelo.Location = new Point(176, 275);
+            txtModelo.Name = "txtModelo";
+            txtModelo.Size = new Size(462, 39);
+            txtModelo.TabIndex = 13;
+            // 
+            // lblMarca
+            // 
+            lblMarca.AutoSize = true;
+            lblMarca.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMarca.Location = new Point(176, 108);
+            lblMarca.Name = "lblMarca";
+            lblMarca.Size = new Size(82, 32);
+            lblMarca.TabIndex = 12;
+            lblMarca.Text = "Marca";
+            // 
+            // txtMarca
+            // 
+            txtMarca.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
+            txtMarca.Location = new Point(176, 147);
+            txtMarca.Name = "txtMarca";
+            txtMarca.Size = new Size(462, 39);
+            txtMarca.TabIndex = 11;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.FromArgb(7, 4, 40);
+            label3.Location = new Point(5, 6);
+            label3.Name = "label3";
+            label3.Size = new Size(437, 38);
+            label3.TabIndex = 5;
+            label3.Text = "Detalles de Hardware del Activo";
             // 
             // PnlEstadisticas
             // 
@@ -503,9 +980,9 @@
             PnlEstadisticas.Controls.Add(PnlEnBodega);
             PnlEstadisticas.Controls.Add(PnlMantenimiento);
             PnlEstadisticas.Controls.Add(lblSaludo);
-            PnlEstadisticas.Location = new Point(882, 578);
+            PnlEstadisticas.Location = new Point(57, 786);
             PnlEstadisticas.Name = "PnlEstadisticas";
-            PnlEstadisticas.Size = new Size(359, 134);
+            PnlEstadisticas.Size = new Size(449, 255);
             PnlEstadisticas.TabIndex = 1;
             PnlEstadisticas.Visible = false;
             // 
@@ -792,462 +1269,43 @@
             // 
             lblSaludo.Font = new Font("Segoe UI Black", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSaludo.ForeColor = Color.FromArgb(245, 154, 38);
-            lblSaludo.Location = new Point(12, 96);
+            lblSaludo.Location = new Point(3, 101);
             lblSaludo.Name = "lblSaludo";
             lblSaludo.Size = new Size(1369, 47);
             lblSaludo.TabIndex = 0;
             lblSaludo.Text = "Saludo";
             lblSaludo.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // PnlAgregarActivo
-            // 
-            PnlAgregarActivo.Controls.Add(BtnGuardarActivo);
-            PnlAgregarActivo.Controls.Add(BtnCancelarActivo);
-            PnlAgregarActivo.Controls.Add(tabControlActivo);
-            PnlAgregarActivo.Location = new Point(882, 747);
-            PnlAgregarActivo.Name = "PnlAgregarActivo";
-            PnlAgregarActivo.Size = new Size(360, 188);
-            PnlAgregarActivo.TabIndex = 0;
-            PnlAgregarActivo.Visible = false;
-            // 
-            // BtnGuardarActivo
-            // 
-            BtnGuardarActivo.Location = new Point(690, 1042);
-            BtnGuardarActivo.Name = "BtnGuardarActivo";
-            BtnGuardarActivo.Size = new Size(706, 56);
-            BtnGuardarActivo.TabIndex = 2;
-            BtnGuardarActivo.Text = "Guardar";
-            BtnGuardarActivo.UseVisualStyleBackColor = true;
-            BtnGuardarActivo.Click += BtnGuardarActivo_Click;
-            // 
-            // BtnCancelarActivo
-            // 
-            BtnCancelarActivo.Location = new Point(0, 1042);
-            BtnCancelarActivo.Name = "BtnCancelarActivo";
-            BtnCancelarActivo.Size = new Size(690, 56);
-            BtnCancelarActivo.TabIndex = 1;
-            BtnCancelarActivo.Text = "Cancelar";
-            BtnCancelarActivo.UseVisualStyleBackColor = true;
-            BtnCancelarActivo.Click += BtnCancelarActivo_Click;
-            // 
-            // tabControlActivo
-            // 
-            tabControlActivo.Controls.Add(tabInfoBase);
-            tabControlActivo.Controls.Add(tabHardware);
-            tabControlActivo.Location = new Point(0, 0);
-            tabControlActivo.Name = "tabControlActivo";
-            tabControlActivo.SelectedIndex = 0;
-            tabControlActivo.Size = new Size(1394, 1042);
-            tabControlActivo.TabIndex = 0;
-            // 
-            // tabInfoBase
-            // 
-            tabInfoBase.BackColor = Color.White;
-            tabInfoBase.Controls.Add(lblFecha);
-            tabInfoBase.Controls.Add(lblEstado);
-            tabInfoBase.Controls.Add(cmbEstadoOperativo);
-            tabInfoBase.Controls.Add(lblCosto);
-            tabInfoBase.Controls.Add(lblProveedor);
-            tabInfoBase.Controls.Add(cmbProveedor);
-            tabInfoBase.Controls.Add(lblCategoria);
-            tabInfoBase.Controls.Add(cmbCategoria);
-            tabInfoBase.Controls.Add(label2);
-            tabInfoBase.Controls.Add(txtCosto);
-            tabInfoBase.Controls.Add(dtpFechaAdquisicion);
-            tabInfoBase.Controls.Add(lblUbicacion);
-            tabInfoBase.Controls.Add(cmbUbicacion);
-            tabInfoBase.Location = new Point(4, 39);
-            tabInfoBase.Name = "tabInfoBase";
-            tabInfoBase.Padding = new Padding(3);
-            tabInfoBase.Size = new Size(1386, 999);
-            tabInfoBase.TabIndex = 0;
-            tabInfoBase.Text = "Información Base";
-            // 
-            // lblFecha
-            // 
-            lblFecha.AutoSize = true;
-            lblFecha.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFecha.Location = new Point(734, 415);
-            lblFecha.Name = "lblFecha";
-            lblFecha.Size = new Size(77, 32);
-            lblFecha.TabIndex = 9;
-            lblFecha.Text = "Fecha";
-            // 
-            // lblEstado
-            // 
-            lblEstado.AutoSize = true;
-            lblEstado.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEstado.Location = new Point(734, 276);
-            lblEstado.Name = "lblEstado";
-            lblEstado.Size = new Size(201, 32);
-            lblEstado.TabIndex = 12;
-            lblEstado.Text = "Estado Operativo";
-            // 
-            // cmbEstadoOperativo
-            // 
-            cmbEstadoOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            cmbEstadoOperativo.FormattingEnabled = true;
-            cmbEstadoOperativo.Location = new Point(734, 315);
-            cmbEstadoOperativo.Name = "cmbEstadoOperativo";
-            cmbEstadoOperativo.Size = new Size(462, 40);
-            cmbEstadoOperativo.TabIndex = 11;
-            // 
-            // lblCosto
-            // 
-            lblCosto.AutoSize = true;
-            lblCosto.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCosto.Location = new Point(734, 580);
-            lblCosto.Name = "lblCosto";
-            lblCosto.Size = new Size(185, 32);
-            lblCosto.TabIndex = 10;
-            lblCosto.Text = "Costo de Activo";
-            // 
-            // lblProveedor
-            // 
-            lblProveedor.AutoSize = true;
-            lblProveedor.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProveedor.Location = new Point(136, 580);
-            lblProveedor.Name = "lblProveedor";
-            lblProveedor.Size = new Size(126, 32);
-            lblProveedor.TabIndex = 8;
-            lblProveedor.Text = "Proveedor";
-            // 
-            // cmbProveedor
-            // 
-            cmbProveedor.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            cmbProveedor.FormattingEnabled = true;
-            cmbProveedor.Location = new Point(136, 620);
-            cmbProveedor.Name = "cmbProveedor";
-            cmbProveedor.Size = new Size(462, 40);
-            cmbProveedor.TabIndex = 7;
-            // 
-            // lblCategoria
-            // 
-            lblCategoria.AutoSize = true;
-            lblCategoria.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCategoria.Location = new Point(136, 276);
-            lblCategoria.Name = "lblCategoria";
-            lblCategoria.Size = new Size(120, 32);
-            lblCategoria.TabIndex = 6;
-            lblCategoria.Text = "Categoría";
-            // 
-            // cmbCategoria
-            // 
-            cmbCategoria.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            cmbCategoria.FormattingEnabled = true;
-            cmbCategoria.Location = new Point(136, 315);
-            cmbCategoria.Name = "cmbCategoria";
-            cmbCategoria.Size = new Size(462, 40);
-            cmbCategoria.TabIndex = 5;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(7, 4, 40);
-            label2.Location = new Point(5, 6);
-            label2.Name = "label2";
-            label2.Size = new Size(386, 38);
-            label2.TabIndex = 4;
-            label2.Text = "Información Base del Activo";
-            // 
-            // txtCosto
-            // 
-            txtCosto.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtCosto.Location = new Point(734, 620);
-            txtCosto.Name = "txtCosto";
-            txtCosto.Size = new Size(462, 39);
-            txtCosto.TabIndex = 3;
-            // 
-            // dtpFechaAdquisicion
-            // 
-            dtpFechaAdquisicion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            dtpFechaAdquisicion.Location = new Point(734, 455);
-            dtpFechaAdquisicion.Name = "dtpFechaAdquisicion";
-            dtpFechaAdquisicion.Size = new Size(462, 39);
-            dtpFechaAdquisicion.TabIndex = 2;
-            // 
-            // lblUbicacion
-            // 
-            lblUbicacion.AutoSize = true;
-            lblUbicacion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUbicacion.Location = new Point(136, 415);
-            lblUbicacion.Name = "lblUbicacion";
-            lblUbicacion.Size = new Size(120, 32);
-            lblUbicacion.TabIndex = 1;
-            lblUbicacion.Text = "Ubicación";
-            // 
-            // cmbUbicacion
-            // 
-            cmbUbicacion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            cmbUbicacion.FormattingEnabled = true;
-            cmbUbicacion.Location = new Point(136, 455);
-            cmbUbicacion.Name = "cmbUbicacion";
-            cmbUbicacion.Size = new Size(462, 40);
-            cmbUbicacion.TabIndex = 0;
-            // 
-            // tabHardware
-            // 
-            tabHardware.BackColor = Color.White;
-            tabHardware.Controls.Add(lblResolucion);
-            tabHardware.Controls.Add(txtResolucionPantalla);
-            tabHardware.Controls.Add(lblSistemaOperativo);
-            tabHardware.Controls.Add(txtSistemaOperativo);
-            tabHardware.Controls.Add(lblAlmacenamiento2);
-            tabHardware.Controls.Add(txtAlmacenamiento2);
-            tabHardware.Controls.Add(lblAlmacenamiento1);
-            tabHardware.Controls.Add(txtAlmacenamiento1);
-            tabHardware.Controls.Add(lblMemoriaRAMlblMemoriaRAM);
-            tabHardware.Controls.Add(txtMemoriaRAM);
-            tabHardware.Controls.Add(lblTarjetaGrafica);
-            tabHardware.Controls.Add(txtTarjetaGrafica);
-            tabHardware.Controls.Add(lblProcesador);
-            tabHardware.Controls.Add(txtProcesador);
-            tabHardware.Controls.Add(lblIP);
-            tabHardware.Controls.Add(txtDireccionIP);
-            tabHardware.Controls.Add(lblMAC);
-            tabHardware.Controls.Add(txtDireccionMAC);
-            tabHardware.Controls.Add(lblNumeroSerie);
-            tabHardware.Controls.Add(txtNumeroSerie);
-            tabHardware.Controls.Add(lblModelo);
-            tabHardware.Controls.Add(txtModelo);
-            tabHardware.Controls.Add(lblMarca);
-            tabHardware.Controls.Add(txtMarca);
-            tabHardware.Controls.Add(label3);
-            tabHardware.Location = new Point(4, 39);
-            tabHardware.Name = "tabHardware";
-            tabHardware.Padding = new Padding(3);
-            tabHardware.Size = new Size(1386, 999);
-            tabHardware.TabIndex = 1;
-            tabHardware.Text = "Detalles de Hardware";
-            // 
-            // lblResolucion
-            // 
-            lblResolucion.AutoSize = true;
-            lblResolucion.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblResolucion.Location = new Point(739, 746);
-            lblResolucion.Name = "lblResolucion";
-            lblResolucion.Size = new Size(258, 32);
-            lblResolucion.TabIndex = 34;
-            lblResolucion.Text = "Resolución de Pantalla";
-            // 
-            // txtResolucionPantalla
-            // 
-            txtResolucionPantalla.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtResolucionPantalla.Location = new Point(739, 784);
-            txtResolucionPantalla.Name = "txtResolucionPantalla";
-            txtResolucionPantalla.Size = new Size(462, 39);
-            txtResolucionPantalla.TabIndex = 33;
-            // 
-            // lblSistemaOperativo
-            // 
-            lblSistemaOperativo.AutoSize = true;
-            lblSistemaOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSistemaOperativo.Location = new Point(739, 620);
-            lblSistemaOperativo.Name = "lblSistemaOperativo";
-            lblSistemaOperativo.Size = new Size(214, 32);
-            lblSistemaOperativo.TabIndex = 32;
-            lblSistemaOperativo.Text = "Sistema Operativo";
-            // 
-            // txtSistemaOperativo
-            // 
-            txtSistemaOperativo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtSistemaOperativo.Location = new Point(739, 658);
-            txtSistemaOperativo.Name = "txtSistemaOperativo";
-            txtSistemaOperativo.Size = new Size(462, 39);
-            txtSistemaOperativo.TabIndex = 31;
-            // 
-            // lblAlmacenamiento2
-            // 
-            lblAlmacenamiento2.AutoSize = true;
-            lblAlmacenamiento2.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAlmacenamiento2.Location = new Point(739, 494);
-            lblAlmacenamiento2.Name = "lblAlmacenamiento2";
-            lblAlmacenamiento2.Size = new Size(234, 32);
-            lblAlmacenamiento2.TabIndex = 30;
-            lblAlmacenamiento2.Text = "Almacenamiento [2]";
-            // 
-            // txtAlmacenamiento2
-            // 
-            txtAlmacenamiento2.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtAlmacenamiento2.Location = new Point(739, 532);
-            txtAlmacenamiento2.Name = "txtAlmacenamiento2";
-            txtAlmacenamiento2.Size = new Size(462, 39);
-            txtAlmacenamiento2.TabIndex = 29;
-            // 
-            // lblAlmacenamiento1
-            // 
-            lblAlmacenamiento1.AutoSize = true;
-            lblAlmacenamiento1.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAlmacenamiento1.Location = new Point(739, 369);
-            lblAlmacenamiento1.Name = "lblAlmacenamiento1";
-            lblAlmacenamiento1.Size = new Size(231, 32);
-            lblAlmacenamiento1.TabIndex = 28;
-            lblAlmacenamiento1.Text = "Almacenamiento [1]";
-            // 
-            // txtAlmacenamiento1
-            // 
-            txtAlmacenamiento1.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtAlmacenamiento1.Location = new Point(739, 407);
-            txtAlmacenamiento1.Name = "txtAlmacenamiento1";
-            txtAlmacenamiento1.Size = new Size(462, 39);
-            txtAlmacenamiento1.TabIndex = 27;
-            // 
-            // lblMemoriaRAMlblMemoriaRAM
-            // 
-            lblMemoriaRAMlblMemoriaRAM.AutoSize = true;
-            lblMemoriaRAMlblMemoriaRAM.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblMemoriaRAMlblMemoriaRAM.Location = new Point(739, 244);
-            lblMemoriaRAMlblMemoriaRAM.Name = "lblMemoriaRAMlblMemoriaRAM";
-            lblMemoriaRAMlblMemoriaRAM.Size = new Size(172, 32);
-            lblMemoriaRAMlblMemoriaRAM.TabIndex = 26;
-            lblMemoriaRAMlblMemoriaRAM.Text = "Memoria RAM";
-            // 
-            // txtMemoriaRAM
-            // 
-            txtMemoriaRAM.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtMemoriaRAM.Location = new Point(739, 281);
-            txtMemoriaRAM.Name = "txtMemoriaRAM";
-            txtMemoriaRAM.Size = new Size(462, 39);
-            txtMemoriaRAM.TabIndex = 25;
-            // 
-            // lblTarjetaGrafica
-            // 
-            lblTarjetaGrafica.AutoSize = true;
-            lblTarjetaGrafica.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTarjetaGrafica.Location = new Point(739, 116);
-            lblTarjetaGrafica.Name = "lblTarjetaGrafica";
-            lblTarjetaGrafica.Size = new Size(169, 32);
-            lblTarjetaGrafica.TabIndex = 24;
-            lblTarjetaGrafica.Text = "Tarjeta gráfica";
-            // 
-            // txtTarjetaGrafica
-            // 
-            txtTarjetaGrafica.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtTarjetaGrafica.Location = new Point(739, 156);
-            txtTarjetaGrafica.Name = "txtTarjetaGrafica";
-            txtTarjetaGrafica.Size = new Size(462, 39);
-            txtTarjetaGrafica.TabIndex = 23;
-            // 
-            // lblProcesador
-            // 
-            lblProcesador.AutoSize = true;
-            lblProcesador.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProcesador.Location = new Point(176, 746);
-            lblProcesador.Name = "lblProcesador";
-            lblProcesador.Size = new Size(135, 32);
-            lblProcesador.TabIndex = 22;
-            lblProcesador.Text = "Procesador";
-            // 
-            // txtProcesador
-            // 
-            txtProcesador.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtProcesador.Location = new Point(176, 785);
-            txtProcesador.Name = "txtProcesador";
-            txtProcesador.Size = new Size(462, 39);
-            txtProcesador.TabIndex = 21;
-            // 
-            // lblIP
-            // 
-            lblIP.AutoSize = true;
-            lblIP.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblIP.Location = new Point(176, 619);
-            lblIP.Name = "lblIP";
-            lblIP.Size = new Size(143, 32);
-            lblIP.TabIndex = 20;
-            lblIP.Text = "Dirección IP";
-            // 
-            // txtDireccionIP
-            // 
-            txtDireccionIP.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtDireccionIP.Location = new Point(176, 657);
-            txtDireccionIP.Name = "txtDireccionIP";
-            txtDireccionIP.Size = new Size(462, 39);
-            txtDireccionIP.TabIndex = 19;
-            // 
-            // lblMAC
-            // 
-            lblMAC.AutoSize = true;
-            lblMAC.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblMAC.Location = new Point(176, 491);
-            lblMAC.Name = "lblMAC";
-            lblMAC.Size = new Size(175, 32);
-            lblMAC.TabIndex = 18;
-            lblMAC.Text = "Dirección MAC";
-            // 
-            // txtDireccionMAC
-            // 
-            txtDireccionMAC.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtDireccionMAC.Location = new Point(176, 530);
-            txtDireccionMAC.Name = "txtDireccionMAC";
-            txtDireccionMAC.Size = new Size(462, 39);
-            txtDireccionMAC.TabIndex = 17;
-            // 
-            // lblNumeroSerie
-            // 
-            lblNumeroSerie.AutoSize = true;
-            lblNumeroSerie.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNumeroSerie.Location = new Point(176, 364);
-            lblNumeroSerie.Name = "lblNumeroSerie";
-            lblNumeroSerie.Size = new Size(195, 32);
-            lblNumeroSerie.TabIndex = 16;
-            lblNumeroSerie.Text = "Numero de serie";
-            // 
-            // txtNumeroSerie
-            // 
-            txtNumeroSerie.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtNumeroSerie.Location = new Point(176, 402);
-            txtNumeroSerie.Name = "txtNumeroSerie";
-            txtNumeroSerie.Size = new Size(462, 39);
-            txtNumeroSerie.TabIndex = 15;
-            // 
-            // lblModelo
-            // 
-            lblModelo.AutoSize = true;
-            lblModelo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblModelo.Location = new Point(176, 238);
-            lblModelo.Name = "lblModelo";
-            lblModelo.Size = new Size(97, 32);
-            lblModelo.TabIndex = 14;
-            lblModelo.Text = "Modelo";
-            // 
-            // txtModelo
-            // 
-            txtModelo.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtModelo.Location = new Point(176, 275);
-            txtModelo.Name = "txtModelo";
-            txtModelo.Size = new Size(462, 39);
-            txtModelo.TabIndex = 13;
-            // 
-            // lblMarca
-            // 
-            lblMarca.AutoSize = true;
-            lblMarca.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblMarca.Location = new Point(176, 108);
-            lblMarca.Name = "lblMarca";
-            lblMarca.Size = new Size(82, 32);
-            lblMarca.TabIndex = 12;
-            lblMarca.Text = "Marca";
-            // 
-            // txtMarca
-            // 
-            txtMarca.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold);
-            txtMarca.Location = new Point(176, 147);
-            txtMarca.Name = "txtMarca";
-            txtMarca.Size = new Size(462, 39);
-            txtMarca.TabIndex = 11;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.FromArgb(7, 4, 40);
-            label3.Location = new Point(5, 6);
-            label3.Name = "label3";
-            label3.Size = new Size(437, 38);
-            label3.TabIndex = 5;
-            label3.Text = "Detalles de Hardware del Activo";
+            // menuStrip1
+            // 
+            menuStrip1.BackColor = Color.FromArgb(7, 4, 40);
+            menuStrip1.Dock = DockStyle.None;
+            menuStrip1.ImageScalingSize = new Size(28, 28);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menúDeFormulariosToolStripMenuItem });
+            menuStrip1.Location = new Point(336, 9);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(272, 40);
+            menuStrip1.TabIndex = 4;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // menúDeFormulariosToolStripMenuItem
+            // 
+            menúDeFormulariosToolStripMenuItem.BackColor = Color.FromArgb(7, 4, 56);
+            menúDeFormulariosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { vistaDeActivosToolStripMenuItem });
+            menúDeFormulariosToolStripMenuItem.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            menúDeFormulariosToolStripMenuItem.ForeColor = Color.FromArgb(244, 154, 36);
+            menúDeFormulariosToolStripMenuItem.Name = "menúDeFormulariosToolStripMenuItem";
+            menúDeFormulariosToolStripMenuItem.Size = new Size(264, 36);
+            menúDeFormulariosToolStripMenuItem.Text = "Menú de Formularios";
+            // 
+            // vistaDeActivosToolStripMenuItem
+            // 
+            vistaDeActivosToolStripMenuItem.BackColor = Color.FromArgb(7, 4, 56);
+            vistaDeActivosToolStripMenuItem.ForeColor = Color.FromArgb(244, 154, 36);
+            vistaDeActivosToolStripMenuItem.Name = "vistaDeActivosToolStripMenuItem";
+            vistaDeActivosToolStripMenuItem.Size = new Size(305, 40);
+            vistaDeActivosToolStripMenuItem.Text = "Vista de Activos";
+            vistaDeActivosToolStripMenuItem.Click += vistaDeActivosToolStripMenuItem_Click;
             // 
             // Dashboard
             // 
@@ -1258,7 +1316,9 @@
             Controls.Add(PnlMain);
             Controls.Add(CloseForm);
             Controls.Add(PnlSidebar);
+            Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.None;
+            MainMenuStrip = menuStrip1;
             Name = "Dashboard";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Dashboard";
@@ -1277,6 +1337,12 @@
             PnlMain.ResumeLayout(false);
             PnlAsignaciones.ResumeLayout(false);
             PnlAsignaciones.PerformLayout();
+            PnlAgregarActivo.ResumeLayout(false);
+            tabControlActivo.ResumeLayout(false);
+            tabInfoBase.ResumeLayout(false);
+            tabInfoBase.PerformLayout();
+            tabHardware.ResumeLayout(false);
+            tabHardware.PerformLayout();
             PnlEstadisticas.ResumeLayout(false);
             PnlEstadisticas.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecientes).EndInit();
@@ -1290,13 +1356,10 @@
             PnlMantenimiento.ResumeLayout(false);
             PnlMantenimiento.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            PnlAgregarActivo.ResumeLayout(false);
-            tabControlActivo.ResumeLayout(false);
-            tabInfoBase.ResumeLayout(false);
-            tabInfoBase.PerformLayout();
-            tabHardware.ResumeLayout(false);
-            tabHardware.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -1305,7 +1368,7 @@
         private Label accesKey;
         private Panel PnlSidebar;
         private Panel PnlProfile;
-        private Button button5;
+        private Button Log_Viewer;
         private Button button4;
         private Button button3;
         private Button BtnAsignaciones;
@@ -1398,8 +1461,11 @@
         private ComboBox cmbColaboradores;
         private Button BtnGuardarAsignacion;
         private Button BtnCancelarAsignacion;
-        private Label lblColaboradorSeleccionado;
         private Label lblActivoSeleccionado;
         private ComboBox cmbTipoActivo;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem menúDeFormulariosToolStripMenuItem;
+        private ToolStripMenuItem vistaDeActivosToolStripMenuItem;
+        private Label lblCo;
     }
 }

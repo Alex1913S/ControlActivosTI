@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
             btnCancelar = new Button();
             btnEliminar = new Button();
@@ -70,7 +72,7 @@
             // 
             // panel1
             // 
-            panel1.BackColor = Color.Navy;
+            panel1.BackColor = Color.FromArgb(7, 4, 40);
             panel1.Controls.Add(btnCancelar);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnModificar);
@@ -83,32 +85,38 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(70, 1162);
+            btnCancelar.BackColor = Color.FromArgb(244, 154, 36);
+            btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.Location = new Point(70, 1161);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(353, 40);
+            btnCancelar.Size = new Size(353, 58);
             btnCancelar.TabIndex = 3;
             btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.UseVisualStyleBackColor = false;
             btnCancelar.Click += btnCancelar_Click;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(70, 1101);
+            btnEliminar.BackColor = Color.FromArgb(244, 154, 36);
+            btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.Location = new Point(70, 1099);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(353, 40);
+            btnEliminar.Size = new Size(353, 58);
             btnEliminar.TabIndex = 2;
             btnEliminar.Text = "Eliminar";
-            btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.UseVisualStyleBackColor = false;
             btnEliminar.Click += btnEliminar_Click;
             // 
             // btnModificar
             // 
+            btnModificar.BackColor = Color.FromArgb(244, 154, 36);
+            btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.Location = new Point(70, 1037);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(353, 40);
+            btnModificar.Size = new Size(353, 58);
             btnModificar.TabIndex = 1;
             btnModificar.Text = "Modificar";
-            btnModificar.UseVisualStyleBackColor = true;
+            btnModificar.UseVisualStyleBackColor = false;
             btnModificar.Click += btnModificar_Click;
             // 
             // tabControl1
@@ -129,7 +137,7 @@
             // Base
             // 
             Base.AccessibleRole = AccessibleRole.None;
-            Base.BackColor = Color.DarkBlue;
+            Base.BackColor = Color.FromArgb(7, 4, 40);
             Base.Controls.Add(cmbEstadoOperativo);
             Base.Controls.Add(lblEtiquetaActivo);
             Base.Controls.Add(txtCosto);
@@ -224,7 +232,7 @@
             // 
             // Hardware
             // 
-            Hardware.BackColor = Color.DarkBlue;
+            Hardware.BackColor = Color.FromArgb(7, 4, 40);
             Hardware.Controls.Add(txtResolucionPantalla);
             Hardware.Controls.Add(txtDireccionIP);
             Hardware.Controls.Add(txtDireccionMAC);
@@ -306,17 +314,19 @@
             // 
             // panel2
             // 
-            panel2.BackColor = Color.DarkBlue;
+            panel2.BackColor = Color.FromArgb(7, 4, 40);
             panel2.Controls.Add(cmbFiltroEstado);
             panel2.Controls.Add(cmbFiltroCategoria);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(486, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1136, 112);
+            panel2.Size = new Size(1236, 112);
             panel2.TabIndex = 1;
             // 
             // cmbFiltroEstado
             // 
+            cmbFiltroEstado.BackColor = Color.FromArgb(244, 154, 36);
+            cmbFiltroEstado.FlatStyle = FlatStyle.System;
             cmbFiltroEstado.FormattingEnabled = true;
             cmbFiltroEstado.Location = new Point(237, 47);
             cmbFiltroEstado.Name = "cmbFiltroEstado";
@@ -326,6 +336,8 @@
             // 
             // cmbFiltroCategoria
             // 
+            cmbFiltroCategoria.BackColor = Color.FromArgb(244, 154, 36);
+            cmbFiltroCategoria.FlatStyle = FlatStyle.System;
             cmbFiltroCategoria.FormattingEnabled = true;
             cmbFiltroCategoria.Location = new Point(6, 47);
             cmbFiltroCategoria.Name = "cmbFiltroCategoria";
@@ -339,17 +351,35 @@
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(486, 112);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1136, 1124);
+            panel3.Size = new Size(1236, 1124);
             panel3.TabIndex = 2;
             // 
             // dgvActivos
             // 
+            dgvActivos.BackgroundColor = Color.FromArgb(7, 4, 40);
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(7, 4, 40);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvActivos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvActivos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(7, 4, 40);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(244, 154, 36);
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvActivos.DefaultCellStyle = dataGridViewCellStyle2;
             dgvActivos.Dock = DockStyle.Fill;
+            dgvActivos.GridColor = Color.FromArgb(7, 4, 40);
             dgvActivos.Location = new Point(0, 0);
             dgvActivos.Name = "dgvActivos";
             dgvActivos.RowHeadersWidth = 72;
-            dgvActivos.Size = new Size(1136, 1124);
+            dgvActivos.Size = new Size(1236, 1124);
             dgvActivos.TabIndex = 0;
             dgvActivos.SelectionChanged += dgvActivos_SelectionChanged;
             // 
@@ -357,7 +387,7 @@
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1622, 1236);
+            ClientSize = new Size(1722, 1236);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);

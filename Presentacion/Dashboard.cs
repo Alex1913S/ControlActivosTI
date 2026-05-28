@@ -1,11 +1,13 @@
 ﻿using AccesoDatos;
 using Dominio;
+using Presentacion.Forms.Activos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using static Dominio.UsuarioDominio;
@@ -47,10 +49,6 @@ namespace Presentacion
             cmbActivos.DataSource = null;
             cmbColaboradores.DataSource = null;
 
-            lblActivoSeleccionado.Text = "Ninguno";
-            lblColaboradorSeleccionado.Text = "Ninguno";
-            lblActivoSeleccionado.ForeColor = Color.Gray;
-            lblColaboradorSeleccionado.ForeColor = Color.Gray;
         }
 
 
@@ -108,6 +106,7 @@ namespace Presentacion
                 60, 60  // ← ajusta el radio a tu gusto
             ));
 
+
             this.username.Text = $"{_nombre} {_apellido}";
             Company_Position.Text = _cargo;
             this.accesKey.Text = $"{_rol}";
@@ -119,6 +118,9 @@ namespace Presentacion
             CargarEstadisticas();
             CargarFotoRedonda();
             AplicarPermisos();
+
+            MostrarPanel(PnlEstadisticas);
+            PnlEstadisticas.Dock = DockStyle.Fill;
         }
 
         private void CargarEstadisticas()
@@ -382,7 +384,7 @@ namespace Presentacion
 
             var dominio = new ActivosDominio();
             var resultado = dominio.CrearActivo(
-                // ITAM.ActivosBase ─────────────────────────
+                // ITAM.ActivosBase 
                 (int)cmbCategoria.SelectedValue,
                 (int)cmbUbicacion.SelectedValue,
                 txtMarca.Text.Trim(),
@@ -393,7 +395,7 @@ namespace Presentacion
                 costo,
                 cmbEstadoOperativo.Text,
 
-                //  ITAM.EspecificacionesHardware ────────────
+                //  ITAM.EspecificacionesHardware
                 txtProcesador.Text.Trim(),
                 txtMemoriaRAM.Text.Trim(),
                 txtAlmacenamiento1.Text.Trim(),
@@ -518,8 +520,6 @@ namespace Presentacion
                 }
 
                 _colaboradorSeleccionadoId = null;
-                lblColaboradorSeleccionado.Text = "Ninguno";
-                lblColaboradorSeleccionado.ForeColor = Color.Gray;
 
                 cmbColaboradores.SelectedIndexChanged += cmbColaboradores_SelectedIndexChanged;
             }
@@ -535,8 +535,6 @@ namespace Presentacion
             if (cmbColaboradores.SelectedValue != null && int.TryParse(cmbColaboradores.SelectedValue.ToString(), out int id))
             {
                 _colaboradorSeleccionadoId = id;
-                lblColaboradorSeleccionado.Text = $"✔ {cmbColaboradores.Text}";
-                lblColaboradorSeleccionado.ForeColor = Color.FromArgb(0, 153, 76);
             }
         }
 
@@ -545,8 +543,6 @@ namespace Presentacion
             if (cmbActivos.SelectedValue != null && cmbActivos.SelectedValue is Guid id)
             {
                 _activoSeleccionadoId = id;
-                lblActivoSeleccionado.Text = $"✔ {cmbActivos.Text}";
-                lblActivoSeleccionado.ForeColor = Color.FromArgb(0, 153, 76);
             }
         }
 
@@ -598,8 +594,6 @@ namespace Presentacion
 
             // Reset de estados visuales de confirmación
             _activoSeleccionadoId = null;
-            lblActivoSeleccionado.Text = "Ninguno";
-            lblActivoSeleccionado.ForeColor = Color.Gray;
         }
 
         private void LimpiarSeleccionAsignacion()
@@ -617,11 +611,6 @@ namespace Presentacion
 
             if (cmbColaboradores.Items.Count > 0) cmbColaboradores.SelectedIndex = -1;
 
-            lblActivoSeleccionado.Text = "Ninguno";
-            lblColaboradorSeleccionado.Text = "Ninguno";
-            lblActivoSeleccionado.ForeColor = Color.Gray;
-            lblColaboradorSeleccionado.ForeColor = Color.Gray;
-
             txtObservacionesAsignacion.Clear();
             dtpFechaAsignacion.Value = DateTime.Today;
 
@@ -634,30 +623,24 @@ namespace Presentacion
         {
             try
             {
-                // 1. Recolectamos la información de las variables de estado y controles
+
                 Guid? activoId = _activoSeleccionadoId;
                 int? colaboradorId = _colaboradorSeleccionadoId;
                 DateTime fechaAsignacion = dtpFechaAsignacion.Value;
                 string observaciones = txtObservacionesAsignacion.Text.Trim();
 
-                // 2. Enviamos los datos a la capa de dominio para ejecutar las reglas de negocio
                 var resultado = _asignarDominio.Registrar(activoId, colaboradorId, fechaAsignacion, observaciones);
 
-                // 3. Procesamos el resultado de la operación
                 if (resultado.Exitoso)
                 {
                     MessageBox.Show("¡Asignación guardada con éxito!\nEl estado del activo ha cambiado a 'Asignado'.",
                         "Operación Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // 4. Actualizamos el catálogo local (el activo asignado desaparecerá automáticamente del ComboBox)
                     CargarActivosDisponibles();
-
-                    // 5. Dejamos el formulario limpio y listo para un nuevo registro
                     LimpiarSeleccionAsignacion();
                 }
                 else
                 {
-                    // Mostramos el mensaje de error específico que devolvió la capa de dominio (ej: fecha futura o campos vacíos)
                     MessageBox.Show(resultado.Mensaje, "Aviso de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -670,7 +653,6 @@ namespace Presentacion
 
         private void BtnCancelarAsignacion_Click(object sender, EventArgs e)
         {
-            // 1. Preguntar al usuario si realmente desea cancelar (buena práctica de UX)
             DialogResult respuesta = MessageBox.Show(
                 "¿Está seguro de que desea cancelar? Se perderán los cambios no guardados.",
                 "Confirmar Cancelación",
@@ -679,16 +661,23 @@ namespace Presentacion
 
             if (respuesta == DialogResult.Yes)
             {
-                // 2. Limpiamos por completo los controles y restablecemos las variables globales
                 LimpiarSeleccionAsignacion();
-
-                // 3. Ocultamos el panel de asignaciones para regresar a la vista principal
                 PnlAsignaciones.Visible = false;
-
-                // Opcional: Si tienes un panel de bienvenida o el fondo del dashboard, 
-                // asegúrate de que vuelva a ser visible aquí. Ejemplo:
-                // PnlInicio.Visible = true;
+                MostrarPanel(PnlEstadisticas);
             }
+        }
+
+        private void Log_Viewer_Click(object sender, EventArgs e)
+        {
+            Log_Audit_Viewer frmAuditoria = new Log_Audit_Viewer();
+            frmAuditoria.Show();
+        }
+
+        private void vistaDeActivosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Asset_ManagementViewer frmvistactivos = new Asset_ManagementViewer();
+            frmvistactivos.Show();
         }
     }
 }
+
