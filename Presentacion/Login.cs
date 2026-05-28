@@ -25,7 +25,6 @@ namespace Presentacion
 
         private void Login_Load(object sender, EventArgs e)
         {
-            // Estilo visual de redondeo de bordes - Textboxt | Botones y Formulario.
             Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
             LoginServices.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, LoginServices.Width, LoginServices.Height, 20, 20));
             Username.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Username.Width, Username.Height, 10, 10));
@@ -106,16 +105,31 @@ namespace Presentacion
             {
                 ConexionSql.VariablesGlobales.xEstIni = 1;
 
+
                 Dashboard FrmMenu = new Dashboard(
                     resultado.Nombres.Split(' ')[0],
                     resultado.Apellidos.Split(' ')[0],
                     resultado.Rol,
-                    resultado.Cargo,    // ✅ nuevo
-                    resultado.Foto      // ✅ nuevo
+                    resultado.Cargo,
+                    resultado.Foto
                 );
+
                 this.Hide();
+
                 FrmMenu.ShowDialog();
-                Application.Exit();
+
+
+                if (FrmMenu.DialogResult == DialogResult.OK)
+                {
+                    this.Show();
+                    Username.Clear();
+                    AccessKey.Clear();
+                    Username.Focus(); 
+                }
+                else
+                {
+                    Application.Exit();
+                }
             }
             else
             {

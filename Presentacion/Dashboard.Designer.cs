@@ -39,7 +39,7 @@
             Btn_Logout = new Button();
             Log_Viewer = new Button();
             button4 = new Button();
-            button3 = new Button();
+            Btn_Employee = new Button();
             BtnAsignaciones = new Button();
             BtnAgregarActivo = new Button();
             PnlProfile = new Panel();
@@ -192,7 +192,7 @@
             PnlSidebar.Controls.Add(Btn_Logout);
             PnlSidebar.Controls.Add(Log_Viewer);
             PnlSidebar.Controls.Add(button4);
-            PnlSidebar.Controls.Add(button3);
+            PnlSidebar.Controls.Add(Btn_Employee);
             PnlSidebar.Controls.Add(BtnAsignaciones);
             PnlSidebar.Controls.Add(BtnAgregarActivo);
             PnlSidebar.Controls.Add(PnlProfile);
@@ -259,16 +259,17 @@
             button4.Text = "Departamentos";
             button4.UseVisualStyleBackColor = false;
             // 
-            // button3
+            // Btn_Employee
             // 
-            button3.BackColor = Color.FromArgb(7, 9, 40);
-            button3.ForeColor = Color.White;
-            button3.Location = new Point(0, 485);
-            button3.Name = "button3";
-            button3.Size = new Size(318, 58);
-            button3.TabIndex = 3;
-            button3.Text = "Colaboradores";
-            button3.UseVisualStyleBackColor = false;
+            Btn_Employee.BackColor = Color.FromArgb(7, 9, 40);
+            Btn_Employee.ForeColor = Color.White;
+            Btn_Employee.Location = new Point(0, 485);
+            Btn_Employee.Name = "Btn_Employee";
+            Btn_Employee.Size = new Size(318, 58);
+            Btn_Employee.TabIndex = 3;
+            Btn_Employee.Text = "Colaboradores";
+            Btn_Employee.UseVisualStyleBackColor = false;
+            Btn_Employee.Click += Btn_Employee_Click;
             // 
             // BtnAsignaciones
             // 
@@ -1318,6 +1319,7 @@
             Controls.Add(PnlSidebar);
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "Dashboard";
             StartPosition = FormStartPosition.CenterScreen;
@@ -1370,7 +1372,7 @@
         private Panel PnlProfile;
         private Button Log_Viewer;
         private Button button4;
-        private Button button3;
+        private Button Btn_Employee;
         private Button BtnAsignaciones;
         private Button BtnAgregarActivo;
         private Button Btn_Logout;

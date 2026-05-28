@@ -15,7 +15,7 @@ namespace AccesoDatos
                 conn.Open();
                 string query = @"SELECT COUNT(*) FROM Core.Colaboradores 
                              WHERE CorreoCorporativo = @correo 
-                             AND PasswordHash = CONVERT(varbinary(max), @pass, 0)";
+                             AND PasswordHash = HASHBYTES('SHA2_256', @pass)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add("@correo", SqlDbType.VarChar).Value = correo;

@@ -62,7 +62,6 @@ namespace Dominio
                     resultado.Intentos = _intentosFallidos;
                     return resultado;
                 }
-                string hashValidar = EncriptarTextoSHA256(passwordHash);
 
                 bool credencialesValidas = _accesoDatos.ValidarCredenciales(correo, passwordHash);
 
@@ -103,19 +102,7 @@ namespace Dominio
             return resultado;
         }
 
-        private string EncriptarTextoSHA256(string textoPlano)
-        {
-            using (System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(textoPlano));
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                foreach (byte b in bytes)
-                {
-                    sb.Append(b.ToString("x2"));
-                }
-                return sb.ToString();
-            }
-        }
+
 
         public class ActivosDominio
         {
@@ -357,11 +344,12 @@ namespace Dominio
                 // Encriptación SHA256 de la contraseña para que coincida con la conversión varbinary del login
                 string passwordHash = EncriptarTextoSHA256(password);
 
-                bool ok = _accesoDatos.InsertarColaborador(
-                    documentoIdentidad, nombres, apellidos, correoCorporativo,
-                    departamentoId, ubicacionId, fechaIngreso, estado, perfilId,
-                    usuarioApp, passwordHash, foto, cargo
-                );
+                bool ok = _accesoDatos.InsertarColaborador
+                    (
+                            documentoIdentidad, nombres, apellidos, correoCorporativo,
+                            departamentoId, ubicacionId, fechaIngreso, estado, perfilId,
+                            usuarioApp, password, foto, cargo // ⬅️ Cambiado 'passwordHash' por 'password' plano
+                    );
 
                 resultado.Exitoso = ok;
                 resultado.Mensaje = ok ? "Colaborador registrado exitosamente en el sistema." : "No se pudo completar el registro del colaborador.";

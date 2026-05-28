@@ -1,6 +1,7 @@
 ﻿using AccesoDatos;
 using Dominio;
 using Presentacion.Forms.Activos;
+using Presentacion.Forms.Colaboradores;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -196,6 +197,12 @@ namespace Presentacion
 
         private void Btn_Logout_Click(object sender, EventArgs e)
         {
+            // 1. Le enviamos la señal "OK" al Login para avisarle que es un deslogueo voluntario
+            this.DialogResult = DialogResult.OK;
+
+            // 2. Cerramos el Dashboard. Al cerrar un ShowDialog, este se destruye 
+            // inmediatamente y le devuelve el control por completo al Login.cs
+            this.Close();
 
         }
 
@@ -677,6 +684,12 @@ namespace Presentacion
         {
             Asset_ManagementViewer frmvistactivos = new Asset_ManagementViewer();
             frmvistactivos.Show();
+        }
+
+        private void Btn_Employee_Click(object sender, EventArgs e)
+        {
+            Enter_Employee frmemployee = new Enter_Employee();
+            frmemployee.Show();
         }
     }
 }

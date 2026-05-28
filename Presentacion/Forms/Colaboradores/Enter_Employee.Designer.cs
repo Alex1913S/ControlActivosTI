@@ -418,8 +418,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(7, 4, 56);
             ClientSize = new Size(1200, 900);
-            Controls.Add(PnlReg2);
             Controls.Add(PnlReg1);
+            Controls.Add(PnlReg2);
             ForeColor = Color.Transparent;
             FormBorderStyle = FormBorderStyle.None;
             Name = "Enter_Employee";

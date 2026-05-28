@@ -12,21 +12,17 @@ namespace Presentacion.Forms.Activos
 {
     public partial class Asset_ManagementViewer : Form
     {
-        // Variables globales del formulario para controlar el activo seleccionado
         private Guid _activoSeleccionadoId = Guid.Empty;
         private string _estadoActivoSeleccionado = "";
 
-
-        // Variable global en el Formulario para cachear los datos originales de SQL
         private DataTable _dtTodosLosActivos = null;
-        private readonly ActivosDominio _activosDominio = new ActivosDominio(); // Funciona directo gracias a tu 'using static Dominio.UsuarioDominio;'
+        private readonly ActivosDominio _activosDominio = new ActivosDominio(); 
 
         private bool _cargando = true;
 
         public Asset_ManagementViewer()
         {
             InitializeComponent();
-            // Vinculamos el evento Load explícitamente si no está desde el diseñador
             this.Load += Asset_ManagementViewer_Load;
         }
 
@@ -36,16 +32,13 @@ namespace Presentacion.Forms.Activos
 
             try
             {
-                _cargando = true; // Bloqueamos eventos visuales temporales
+                _cargando = true;
 
-                //LLENAR COMBOBOX DE CATEGORÍAS (Para el Formulario de Edición)
                 DataTable dtCategorias = _activosDominio.ObtenerCategorias();
                 cmbCategoria.DisplayMember = "Nombre";
                 cmbCategoria.ValueMember = "CategoriaID";
                 cmbCategoria.DataSource = dtCategorias;
 
-                // LLENAR COMBOBOX DE FILTRO DE CATEGORÍAS (Filtro Superior)
-                // Clonamos el formato para agregar la opción "Todas" sin alterar el original
                 DataTable dtFiltroCat = dtCategorias.Copy();
                 DataRow rowTodas = dtFiltroCat.NewRow();
                 rowTodas["CategoriaID"] = 0;
@@ -57,24 +50,21 @@ namespace Presentacion.Forms.Activos
                 cmbFiltroCategoria.DataSource = dtFiltroCat;
                 cmbFiltroCategoria.SelectedIndex = 0;
 
-                // LLENAR COMBOBOX DE UBICACIONES / SEDES (Formulario)
+
                 DataTable dtUbicaciones = _activosDominio.ObtenerUbicaciones();
                 cmbUbicacion.DisplayMember = "NombreNomenclatura";
                 cmbUbicacion.ValueMember = "UbicacionID";
                 cmbUbicacion.DataSource = dtUbicaciones;
 
-                // LLENAR COMBOBOX DE ESTADOS OPERATIVOS
-                // Combo del Formulario
                 cmbEstadoOperativo.Items.Clear();
                 cmbEstadoOperativo.Items.AddRange(new object[] { "En Bodega", "Asignado", "En Mantenimiento" });
                 cmbEstadoOperativo.SelectedIndex = 0;
 
-                // Combo del Filtro Superior
+
                 cmbFiltroEstado.Items.Clear();
                 cmbFiltroEstado.Items.AddRange(new object[] { "— Todos los Estados —", "En Bodega", "Asignado", "En Mantenimiento" });
                 cmbFiltroEstado.SelectedIndex = 0;
 
-                //CARGAR EL GRID PRINCIPAL
                 RefrescarGrid();
             }
             catch (Exception ex)
@@ -83,9 +73,9 @@ namespace Presentacion.Forms.Activos
             }
             finally
             {
-                _cargando = false; // Liberamos la bandera. El formulario ya es interactivo.
+                _cargando = false;
 
-                // Forzamos la primera sincronización manual de la fila seleccionada
+
                 if (dgvActivos.CurrentRow != null)
                 {
                     dgvActivos_SelectionChanged(this, EventArgs.Empty);
@@ -96,7 +86,7 @@ namespace Presentacion.Forms.Activos
         private void RefrescarGrid()
         {
             _dtTodosLosActivos = _activosDominio.ListarActivos();
-            dgvActivos.AutoGenerateColumns = true; // 👈 Agrega esta línea antes del DataSource
+            dgvActivos.AutoGenerateColumns = true;
             AplicarFiltrosCombinados();
         }
 
@@ -104,11 +94,9 @@ namespace Presentacion.Forms.Activos
         {
             if (_dtTodosLosActivos == null) return;
 
-            // Creamos una vista de datos filtrable en memoria
             DataView dv = new DataView(_dtTodosLosActivos);
             List<string> filtros = new List<string>();
 
-            // Filtro 1: Categorías
             if (cmbFiltroCategoria.SelectedValue != null &&
                 int.TryParse(cmbFiltroCategoria.SelectedValue.ToString(), out int catId) &&
                 catId > 0)
@@ -116,36 +104,33 @@ namespace Presentacion.Forms.Activos
                 filtros.Add($"CategoriaID = {catId}");
             }
 
-            // Filtro 2: Asignaciones / Inventario (EstadoOperativo)
             string estadoSel = cmbFiltroEstado.SelectedItem?.ToString() ?? "— Todos los Estados —";
             if (estadoSel != "— Todos los Estados —")
             {
                 filtros.Add($"EstadoOperativo = '{estadoSel.Replace("'", "''")}'");
             }
 
-            // Unir condiciones dinámicamente con un operador AND si existen filtros activos
             if (filtros.Count > 0)
             {
                 dv.RowFilter = string.Join(" AND ", filtros);
             }
             else
             {
-                dv.RowFilter = ""; // Muestra todo si no hay filtros seleccionados
+                dv.RowFilter = "";
             }
 
-            // Asignar el DataView directamente al DataGridView
+
             dgvActivos.DataSource = dv;
 
-            // Opcional: Ocultar columnas de IDs para el usuario final
-            if (dgvActivos.Columns["ActivoID"] != null) dgvActivos.Columns["ActivoID"].Visible = false;
-            if (dgvActivos.Columns["CategoriaID"] != null) dgvActivos.Columns["CategoriaID"].Visible = false;
-            if (dgvActivos.Columns["UbicacionID"] != null) dgvActivos.Columns["UbicacionID"].Visible = false;
-            // Ocultar llaves primarias y foráneas
+
             if (dgvActivos.Columns["ActivoID"] != null) dgvActivos.Columns["ActivoID"].Visible = false;
             if (dgvActivos.Columns["CategoriaID"] != null) dgvActivos.Columns["CategoriaID"].Visible = false;
             if (dgvActivos.Columns["UbicacionID"] != null) dgvActivos.Columns["UbicacionID"].Visible = false;
 
-            // Ocultar especificaciones técnicas del grid (pero se mantienen accesibles en Cells["..."])
+            if (dgvActivos.Columns["ActivoID"] != null) dgvActivos.Columns["ActivoID"].Visible = false;
+            if (dgvActivos.Columns["CategoriaID"] != null) dgvActivos.Columns["CategoriaID"].Visible = false;
+            if (dgvActivos.Columns["UbicacionID"] != null) dgvActivos.Columns["UbicacionID"].Visible = false;
+
             if (dgvActivos.Columns["Procesador"] != null) dgvActivos.Columns["Procesador"].Visible = true;
             if (dgvActivos.Columns["MemoriaRAM"] != null) dgvActivos.Columns["MemoriaRAM"].Visible = true;
             if (dgvActivos.Columns["Almacenamiento1"] != null) dgvActivos.Columns["Almacenamiento1"].Visible = true;
@@ -169,7 +154,6 @@ namespace Presentacion.Forms.Activos
 
         private void dgvActivos_SelectionChanged(object sender, EventArgs e)
         {
-            // Si la bandera está activa, salir inmediatamente para no generar errores de índice
             if (_cargando) return;
 
             if (dgvActivos.CurrentRow == null || dgvActivos.CurrentRow.Index < 0) return;
@@ -179,12 +163,11 @@ namespace Presentacion.Forms.Activos
             _activoSeleccionadoId = (Guid)fila.Cells["ActivoID"].Value;
             _estadoActivoSeleccionado = fila.Cells["EstadoOperativo"].Value.ToString();
 
-            // Sincronizar Combos de edición basados en los IDs de la fila
             cmbCategoria.SelectedValue = fila.Cells["CategoriaID"].Value;
             cmbUbicacion.SelectedValue = fila.Cells["UbicacionID"].Value;
             cmbEstadoOperativo.Text = _estadoActivoSeleccionado;
 
-            // Cajas de texto estándar
+
             txtMarca.Text = fila.Cells["Marca"].Value?.ToString() ?? "";
             txtModelo.Text = fila.Cells["Modelo"].Value?.ToString() ?? "";
             txtNumeroSerie.Text = fila.Cells["NumeroSerie"].Value?.ToString() ?? "";
@@ -199,8 +182,6 @@ namespace Presentacion.Forms.Activos
             {
                 dtpFechaAdquisicion.Checked = false;
             }
-
-            // Hardware
             txtProcesador.Text = fila.Cells["Procesador"].Value?.ToString() ?? "";
             txtMemoriaRAM.Text = fila.Cells["MemoriaRAM"].Value?.ToString() ?? "";
             txtAlmacenamiento1.Text = fila.Cells["Almacenamiento1"].Value?.ToString() ?? "";
@@ -222,18 +203,15 @@ namespace Presentacion.Forms.Activos
                 return;
             }
 
-            // Validaciones rápidas de negocio
             if (cmbCategoria.SelectedIndex == -1 || cmbUbicacion.SelectedIndex == -1)
             {
                 MessageBox.Show("Categoría y Ubicación son campos obligatorios.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Formatear datos nulos u opcionales de manera segura
             decimal? costo = string.IsNullOrWhiteSpace(txtCosto.Text) ? null : (decimal?)decimal.Parse(txtCosto.Text);
             DateTime? fecha = dtpFechaAdquisicion.Checked ? (DateTime?)dtpFechaAdquisicion.Value : null;
 
-            // Enviar datos consolidados a la Capa de Dominio
             ResultadoActivo resultado = _activosDominio.ModificarActivo(
                 _activoSeleccionadoId,
                 (int)cmbCategoria.SelectedValue,
@@ -241,7 +219,7 @@ namespace Presentacion.Forms.Activos
                 txtMarca.Text.Trim(),
                 txtModelo.Text.Trim(),
                 txtNumeroSerie.Text.Trim(),
-                null, // Proveedor ID (si aplica, sino null)
+                null,
                 fecha,
                 costo,
                 cmbEstadoOperativo.Text,
@@ -259,7 +237,7 @@ namespace Presentacion.Forms.Activos
             if (resultado.Exitoso)
             {
                 MessageBox.Show(resultado.Mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefrescarGrid(); // Recarga los datos desde la BD
+                RefrescarGrid(); 
                 LimpiarControles();
             }
             else
@@ -306,14 +284,12 @@ namespace Presentacion.Forms.Activos
 
         private void LimpiarControles()
         {
-            // 1. Resetear identificadores de estado
+            
             _activoSeleccionadoId = Guid.Empty;
             _estadoActivoSeleccionado = "";
 
-            // 2. Limpiar selección del DataGrid de forma segura
             dgvActivos.ClearSelection();
 
-            // 3. Vaciar cajas de texto e inputs de ambas pestañas
             txtMarca.Clear();
             txtModelo.Clear();
             txtNumeroSerie.Clear();
@@ -331,7 +307,6 @@ namespace Presentacion.Forms.Activos
             txtDireccionIP.Clear();
             txtResolucionPantalla.Clear();
 
-            // 4. Resetear ComboBoxes
             if (cmbCategoria.Items.Count > 0) cmbCategoria.SelectedIndex = 0;
             if (cmbUbicacion.Items.Count > 0) cmbUbicacion.SelectedIndex = 0;
             if (cmbEstadoOperativo.Items.Count > 0) cmbEstadoOperativo.SelectedIndex = 0;

@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_ManagementViewer));
             panel1 = new Panel();
             btnCancelar = new Button();
             btnEliminar = new Button();
@@ -391,6 +392,7 @@
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Asset_ManagementViewer";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Asset_ManagementViewer";

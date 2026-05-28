@@ -47,7 +47,7 @@ namespace Presentacion.Forms.Activos
 
         private void Log_Audit_Viewer_Load(object sender, EventArgs e)
         {
-            // Inicializar el filtro con los últimos 7 días por defecto
+
             dtpDesde.Value = DateTime.Today.AddDays(-7);
             dtpHasta.Value = DateTime.Today;
 
@@ -60,7 +60,6 @@ namespace Presentacion.Forms.Activos
                 DataTable dtLogs = _auditoriaDominio.ListarLogsAuditoria(dtpDesde.Value, dtpHasta.Value);
                 dgvLogs.DataSource = dtLogs;
 
-                // Formatear las columnas visibles en la cuadrícula
                 if (dgvLogs.Columns["LogID"] != null) dgvLogs.Columns["LogID"].HeaderText = "ID Log";
                 if (dgvLogs.Columns["TablaAfectada"] != null) dgvLogs.Columns["TablaAfectada"].HeaderText = "Tabla";
                 if (dgvLogs.Columns["RegistroID"] != null) dgvLogs.Columns["RegistroID"].HeaderText = "ID Registro Activo";
@@ -68,7 +67,7 @@ namespace Presentacion.Forms.Activos
                 if (dgvLogs.Columns["UsuarioBD"] != null) dgvLogs.Columns["UsuarioBD"].HeaderText = "Usuario";
                 if (dgvLogs.Columns["FechaAccion"] != null) dgvLogs.Columns["FechaAccion"].HeaderText = "Fecha y Hora";
 
-                // Mantenemos los detalles masivos ocultos en la pantalla pero vivos en el DataSource para la exportación
+
                 if (dgvLogs.Columns["DetalleAnterior"] != null) dgvLogs.Columns["DetalleAnterior"].Visible = false;
                 if (dgvLogs.Columns["DetalleNuevo"] != null) dgvLogs.Columns["DetalleNuevo"].Visible = false;
             }
@@ -111,7 +110,7 @@ namespace Presentacion.Forms.Activos
                     {
                         var csvContent = new StringBuilder();
 
-                        // Encabezados del Reporte SGSI (Incluye las columnas de detalles)
+   
                         csvContent.AppendLine("ID Log;Tabla;ID Registro Activo;Operación;Usuario;Fecha y Hora;Detalle Anterior;Detalle Nuevo");
 
                         foreach (DataGridViewRow fila in dgvLogs.Rows)
@@ -125,7 +124,7 @@ namespace Presentacion.Forms.Activos
                             string usuario = fila.Cells["UsuarioBD"].Value?.ToString() ?? "";
                             string fecha = fila.Cells["FechaAccion"].Value?.ToString() ?? "";
 
-                            // Limpieza rápida de quiebres de línea para evitar romper la estructura del archivo CSV
+
                             string detAnt = (fila.Cells["DetalleAnterior"].Value?.ToString() ?? "").Replace("\"", "'").Replace("\r\n", " ");
                             string detNue = (fila.Cells["DetalleNuevo"].Value?.ToString() ?? "").Replace("\"", "'").Replace("\r\n", " ");
 

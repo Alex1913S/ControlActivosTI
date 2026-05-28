@@ -9,42 +9,44 @@ namespace AccesoDatos
     public class ColaboradorAccesoDatos: ConexionSql
     {
         public bool InsertarColaborador(
-            string documentoIdentidad, string nombres, string apellidos,
-            string correoCorporativo, int departamentoId, int ubicacionId,
-            DateTime fechaIngreso, string estado, int perfilId,
-            string usuarioApp, string passwordHash, byte[] foto, string cargo)
+    string documentoIdentidad, string nombres, string apellidos,
+    string correoCorporativo, int departamentoId, int ubicacionId,
+    DateTime fechaIngreso, string estado, int perfilId,
+    string usuarioApp, string passwordPlano, byte[] foto, string cargo)
         {
             using (var conn = GetConnection())
             {
                 conn.Open();
                 string query = @"INSERT INTO Core.Colaboradores 
-                 (DocumentoIdentidad, Nombres, Apellidos, CorreoCorporativo, 
-                  DepartamentoID, UbicacionID, FechaIngreso, Estado, 
-                  PerfilID, UsuarioApp, PasswordHash, Foto, Cargo)
-                 VALUES 
-                 (@cedula, @nombres, @apellidos, @correo, 
-                  @deptoId, @ubiId, @fechaIngreso, @estado, 
-                  @perfilId, @usuario, HASHBYTES('SHA2_256', @pass), @foto, @cargo)";
+                (DocumentoIdentidad, Nombres, Apellidos, CorreoCorporativo, DepartamentoID, UbicacionID, FechaIngreso, Estado, PerfilID, UsuarioApp, PasswordHash, Foto, Cargo)
+                VALUES 
+                (@cedula, @nombre, @apellidos, @correo, @deptoId, @ubiId, @fecha, @estado, @perfilId, @usuario, HASHBYTES('SHA2_256', @pass), @foto, @cargo)";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.Add("@cedula", SqlDbType.VarChar).Value = documentoIdentidad;
-                    cmd.Parameters.Add("@nombres", SqlDbType.VarChar).Value = nombres;
+
+                    // CORREGIDO: Cambiado de @nombres a @nombre para coincidir con el SQL
+                    cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value = nombres;
+
                     cmd.Parameters.Add("@apellidos", SqlDbType.VarChar).Value = apellidos;
                     cmd.Parameters.Add("@correo", SqlDbType.VarChar).Value = correoCorporativo;
                     cmd.Parameters.Add("@deptoId", SqlDbType.Int).Value = departamentoId;
                     cmd.Parameters.Add("@ubiId", SqlDbType.Int).Value = ubicacionId;
-                    cmd.Parameters.Add("@fechaIngreso", SqlDbType.DateTime).Value = fechaIngreso;
+
+                    // CORREGIDO: Cambiado de @fechaIngreso a @fecha para coincidir con el SQL
+                    cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = fechaIngreso;
+
                     cmd.Parameters.Add("@estado", SqlDbType.Bit).Value = (estado == "Activo");
                     cmd.Parameters.Add("@perfilId", SqlDbType.Int).Value = perfilId;
                     cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuarioApp;
-                    cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = passwordHash;
+                    cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = passwordPlano;
                     cmd.Parameters.Add("@cargo", SqlDbType.VarChar).Value = cargo;
 
                     if (foto != null)
                         cmd.Parameters.Add("@foto", SqlDbType.VarBinary).Value = foto;
                     else
-                        cmd.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value; 
+                        cmd.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value;
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
