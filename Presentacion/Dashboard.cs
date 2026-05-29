@@ -51,6 +51,15 @@ namespace Presentacion
             cmbColaboradores.DataSource = null;
 
         }
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; // Activa el estilo Doble búfer para todo el árbol de controles)
+                return cp;
+            }
+        }
 
 
         private void AplicarPermisos()
@@ -115,6 +124,9 @@ namespace Presentacion
             // Saludo y fecha en PnlEstadisticas
             lblSaludo.Text = $"Bienvenido, {_nombre} 👋";
             lblFecha1.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy");
+
+            tabControlActivo.SizeMode = TabSizeMode.Fixed;
+            tabControlActivo.ItemSize = new Size(0, 1);
 
             CargarEstadisticas();
             CargarFotoRedonda();
@@ -677,19 +689,41 @@ namespace Presentacion
         private void Log_Viewer_Click(object sender, EventArgs e)
         {
             Log_Audit_Viewer frmAuditoria = new Log_Audit_Viewer();
-            frmAuditoria.Show();
+            frmAuditoria.ShowDialog();
         }
 
         private void vistaDeActivosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Asset_ManagementViewer frmvistactivos = new Asset_ManagementViewer();
-            frmvistactivos.Show();
+            frmvistactivos.ShowDialog();
         }
 
         private void Btn_Employee_Click(object sender, EventArgs e)
         {
             Enter_Employee frmemployee = new Enter_Employee();
-            frmemployee.Show();
+            frmemployee.ShowDialog();
+        }
+
+        private void BtnSiguiente_Click(object sender, EventArgs e)
+        {
+            if (tabControlActivo.SelectedTab == tabInfoBase)
+            {
+                tabControlActivo.SelectedTab = tabHardware;
+            }
+        }
+
+        private void BtnAtras_Click(object sender, EventArgs e)
+        {
+            if (tabControlActivo.SelectedTab == tabHardware)
+            {
+                tabControlActivo.SelectedTab = tabInfoBase;
+            }
+        }
+
+        private void vistaDeEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Employee_Viewer frmcolaboradores = new Employee_Viewer();
+            frmcolaboradores.ShowDialog();
         }
     }
 }

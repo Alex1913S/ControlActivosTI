@@ -8,20 +8,46 @@ namespace AccesoDatos
 {
     public class UsuarioAccesoDatos : ConexionSql
     {
-        public bool ValidarCredenciales(string correo, string passwordHash)
+        //public bool ValidarCredenciales(string correo, string passwordHash)
+        //{
+        //    using (var conn = GetConnection())
+        //    {
+        //        conn.Open();
+        //        string query = @"SELECT COUNT(*) FROM Core.Colaboradores 
+        //                     WHERE CorreoCorporativo = @correo 
+        //                     AND PasswordHash = HASHBYTES('SHA2_256', @pass)";
+
+        //        SqlCommand cmd = new SqlCommand(query, conn);
+        //        cmd.Parameters.Add("@correo", SqlDbType.VarChar).Value = correo;
+        //        cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = passwordHash;
+
+        //        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+        //    }
+        //}
+
+        public int ValidarCredenciales(string correo, string passwordHash)
         {
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = @"SELECT COUNT(*) FROM Core.Colaboradores 
-                             WHERE CorreoCorporativo = @correo 
-                             AND PasswordHash = HASHBYTES('SHA2_256', @pass)";
+                // Cambiamos COUNT(*) por la columna Estado para evaluar su valor binario (Bit)
+                string query = @"SELECT Estado FROM Core.Colaboradores 
+                         WHERE CorreoCorporativo = @correo 
+                         AND PasswordHash = HASHBYTES('SHA2_256', @pass)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add("@correo", SqlDbType.VarChar).Value = correo;
                 cmd.Parameters.Add("@pass", SqlDbType.VarChar).Value = passwordHash;
 
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                object resultado = cmd.ExecuteScalar();
+
+                if (resultado == null)
+                {
+                    return -1; // Las credenciales no coinciden o el usuario no existe
+                }
+
+                // Si coincide, evaluamos si el bit de Estado es true (1) o false (0)
+                return Convert.ToBoolean(resultado) ? 1 : 0;
             }
         }
 

@@ -12,6 +12,7 @@ namespace Presentacion.Forms.Colaboradores
 {
     public partial class Enter_Employee : Form
     {
+
         private readonly ColaboradorDominio _colaboradorDominio = new ColaboradorDominio();
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int radio1, int radio2);
@@ -19,6 +20,7 @@ namespace Presentacion.Forms.Colaboradores
         public Enter_Employee()
         {
             InitializeComponent();
+            this.Paint += new PaintEventHandler(TuFormulario_Paint);
         }
 
         private void Enter_Employee_Load(object sender, EventArgs e)
@@ -29,10 +31,61 @@ namespace Presentacion.Forms.Colaboradores
             PicFoto.SizeMode = PictureBoxSizeMode.Normal;
             PnlReg1.Size = PnlReg2.Size;
             PnlReg2.Location = PnlReg1.Location;
-            
+
 
             ConfigurarComboBoxesIniciales();
             MostrarPanel1();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            this.Region = Region.FromHrgn(
+                CreateRoundRectRgn(0, 0, Width, Height, 40, 40)
+            );
+        }
+
+        private void TuFormulario_Paint(object sender, PaintEventArgs e)
+        {
+            // 1. Suavizado de alta calidad para las curvas
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // 2. Coloca aquí el radio exacto que usaste para redondear tu formulario (ej: 20)
+            int radioEsquina = 40;
+
+            int ancho = this.ClientSize.Width; // 1100
+            int alto = this.ClientSize.Height;  // 900
+
+            // 3. Al iniciar en (1, 1) y restar 3 al tamaño, creamos un marco perfectamente
+            // centrado y simétrico que esquiva el recorte de Windows en los 4 costados.
+            using (GraphicsPath rutaBorde = ObtenerRutaRendondeada(1, 1, ancho - 3, alto - 3, radioEsquina))
+            {
+                // Usamos el pincel normal (sin Inset) con un grosor limpio de 1 píxel
+                using (Pen pincelBorde = new Pen(Color.DarkGray, 1f))
+                {
+                    e.Graphics.DrawPath(pincelBorde, rutaBorde);
+                }
+            }
+        }
+
+        private GraphicsPath ObtenerRutaRendondeada(int x, int y, int width, int height, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            int diametro = radius * 2;
+
+            path.StartFigure();
+            // Esquina superior izquierda
+            path.AddArc(x, y, diametro, diametro, 180, 90);
+            // Esquina superior derecha
+            path.AddArc(x + width - diametro, y, diametro, diametro, 270, 90);
+            // Esquina inferior derecha
+            path.AddArc(x + width - diametro, y + height - diametro, diametro, diametro, 0, 90);
+            // Esquina inferior izquierda
+            path.AddArc(x, y + height - diametro, diametro, diametro, 90, 90);
+            path.CloseFigure();
+
+            return path;
         }
 
         private void ConfigurarComboBoxesIniciales()
@@ -111,7 +164,7 @@ namespace Presentacion.Forms.Colaboradores
 
                 double ratioX = (double)anchoDestino / imgOriginal.Width;
                 double ratioY = (double)altoDestino / imgOriginal.Height;
-                double ratio = Math.Max(ratioX, ratioY); 
+                double ratio = Math.Max(ratioX, ratioY);
 
                 int nuevoAncho = (int)(imgOriginal.Width * ratio);
                 int nuevoAlto = (int)(imgOriginal.Height * ratio);
@@ -195,6 +248,15 @@ namespace Presentacion.Forms.Colaboradores
             {
                 MessageBox.Show(resultado.Mensaje, "Error de Registro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void CloseForm_Click(object sender, EventArgs e)
+        {
+            DialogResult rta = MessageBox.Show(
+            "¿Desea cerrar el formulario Nuevo Empleado?", "Cerrar Formulario",
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (rta == DialogResult.Yes)
+            this.Close();
         }
     }
 }

@@ -203,8 +203,8 @@
             // 
             // Login
             // 
-            AutoScaleDimensions = new SizeF(12F, 30F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(168F, 168F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.FromArgb(7, 4, 40);
             ClientSize = new Size(1200, 753);
             Controls.Add(CloseForm);

@@ -35,6 +35,16 @@ namespace Presentacion.Forms.Activos
 
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; // Activa el estilo WS_EX_COMPOSITED (Doble búfer para todo el árbol de controles)
+                return cp;
+            }
+        }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);

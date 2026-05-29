@@ -40,64 +40,100 @@ namespace Dominio
         private int _intentosFallidos = 0;
         private const int MaxIntentos = 3;
 
+        //public ResultadoLogin Login(string correo, string passwordHash)
+        //{
+        //    var resultado = new ResultadoLogin();
+
+        //    try
+        //    {
+        //        if (_intentosFallidos >= MaxIntentos)
+        //        {
+        //            resultado.Exitoso = false;
+        //            resultado.Bloqueado = true;
+        //            resultado.Intentos = _intentosFallidos;
+        //            resultado.Mensaje = "Usuario bloqueado. Consulte al administrador.";
+        //            return resultado;
+        //        }
+
+        //        if (string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(passwordHash))
+        //        {
+        //            resultado.Exitoso = false;
+        //            resultado.Mensaje = "El correo y la contraseña son obligatorios.";
+        //            resultado.Intentos = _intentosFallidos;
+        //            return resultado;
+        //        }
+
+        //        bool credencialesValidas = _accesoDatos.ValidarCredenciales(correo, passwordHash);
+
+        //        if (credencialesValidas)
+        //        {
+
+        //            var datos = _accesoDatos.ObtenerDatosUsuario(correo);
+
+        //            resultado.Exitoso = true;
+        //            resultado.Bloqueado = false;
+        //            resultado.Intentos = 0;
+        //            resultado.Mensaje = "Inicio de sesión exitoso.";
+        //            resultado.Nombres = datos.Nombres;
+        //            resultado.Apellidos = datos.Apellidos;
+        //            resultado.Departamento = datos.Departamento;
+        //            resultado.Rol = datos.Rol;
+        //            resultado.Cargo = datos.Cargo;
+        //            resultado.Foto = datos.Foto;    
+        //            _intentosFallidos = 0;
+        //        }
+        //        else
+        //        {
+        //            _intentosFallidos++;
+        //            resultado.Exitoso = false;
+        //            resultado.Bloqueado = _intentosFallidos >= MaxIntentos;
+        //            resultado.Intentos = _intentosFallidos;
+        //            resultado.Mensaje = resultado.Bloqueado
+        //                ? "Superó el número de intentos. Consulte al administrador."
+        //                : $"Credenciales incorrectas. Intentos restantes: {MaxIntentos - _intentosFallidos}";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        resultado.Exitoso = false;
+        //        resultado.Mensaje = $"ERROR: {ex.Message}";
+        //    }
+
+        //    return resultado;
+        //}
+
         public ResultadoLogin Login(string correo, string passwordHash)
         {
-            var resultado = new ResultadoLogin();
+            ResultadoLogin resultado = new ResultadoLogin();
 
-            try
-            {
-                if (_intentosFallidos >= MaxIntentos)
-                {
-                    resultado.Exitoso = false;
-                    resultado.Bloqueado = true;
-                    resultado.Intentos = _intentosFallidos;
-                    resultado.Mensaje = "Usuario bloqueado. Consulte al administrador.";
-                    return resultado;
-                }
+            // 1. Validar credenciales y capturar el estado de integridad
+            int codigoControl = _accesoDatos.ValidarCredenciales(correo, passwordHash);
 
-                if (string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(passwordHash))
-                {
-                    resultado.Exitoso = false;
-                    resultado.Mensaje = "El correo y la contraseña son obligatorios.";
-                    resultado.Intentos = _intentosFallidos;
-                    return resultado;
-                }
-
-                bool credencialesValidas = _accesoDatos.ValidarCredenciales(correo, passwordHash);
-
-                if (credencialesValidas)
-                {
-                   
-                    var datos = _accesoDatos.ObtenerDatosUsuario(correo);
-
-                    resultado.Exitoso = true;
-                    resultado.Bloqueado = false;
-                    resultado.Intentos = 0;
-                    resultado.Mensaje = "Inicio de sesión exitoso.";
-                    resultado.Nombres = datos.Nombres;
-                    resultado.Apellidos = datos.Apellidos;
-                    resultado.Departamento = datos.Departamento;
-                    resultado.Rol = datos.Rol;
-                    resultado.Cargo = datos.Cargo;
-                    resultado.Foto = datos.Foto;    
-                    _intentosFallidos = 0;
-                }
-                else
-                {
-                    _intentosFallidos++;
-                    resultado.Exitoso = false;
-                    resultado.Bloqueado = _intentosFallidos >= MaxIntentos;
-                    resultado.Intentos = _intentosFallidos;
-                    resultado.Mensaje = resultado.Bloqueado
-                        ? "Superó el número de intentos. Consulte al administrador."
-                        : $"Credenciales incorrectas. Intentos restantes: {MaxIntentos - _intentosFallidos}";
-                }
-            }
-            catch (Exception ex)
+            if (codigoControl == -1)
             {
                 resultado.Exitoso = false;
-                resultado.Mensaje = $"ERROR: {ex.Message}";
+                resultado.Mensaje = "Usuario o contraseña incorrectos.";
+                return resultado;
             }
+            else if (codigoControl == 0)
+            {
+                // CONTROL DE ACCESO CRÍTICO: Detiene la autenticación de raíz si está Inactivo
+                resultado.Exitoso = false;
+                resultado.Mensaje = "Acceso denegado: Esta cuenta se encuentra INACTIVA. Comuníquese con el Administrador de Seguridad de la Información.";
+                return resultado;
+            }
+
+            // 2. Si el código es 1 (Activo), procedemos a extraer el perfil completo para el Dashboard
+            var datos = _accesoDatos.ObtenerDatosUsuario(correo);
+
+            resultado.Exitoso = true;
+            resultado.Nombres = datos.Nombres;
+            resultado.Apellidos = datos.Apellidos;
+            resultado.Departamento = datos.Departamento;
+            resultado.Rol = datos.Rol;
+            resultado.Cargo = datos.Cargo;
+            resultado.Foto = datos.Foto;
+            resultado.Mensaje = "Bienvenido al sistema.";
 
             return resultado;
         }
@@ -395,7 +431,36 @@ namespace Dominio
         {
             return _accesoDatos.ObtenerPerfiles();
         }
+
     }
 
+    public class CN_Colaboradores
+    {
+        private ColaboradorAccesoDatos objetoCD = new ColaboradorAccesoDatos();
 
+        // Puente para Modificar
+        public bool EditarColaborador(
+            string documentoIdentidad, string nombres, string apellidos,
+            string correoCorporativo, int departamentoId, int ubicacionId,
+            DateTime fechaIngreso, string estado, int perfilId,
+            string usuarioApp, string passwordPlano, byte[] foto, string cargo)
+        {
+            // Aquí puedes agregar validaciones de negocio previas si fuesen necesarias
+            return objetoCD.ModificarColaborador(documentoIdentidad, nombres, apellidos, correoCorporativo, 
+                                                 departamentoId, ubicacionId, fechaIngreso, estado, 
+                                                 perfilId, usuarioApp, passwordPlano, foto, cargo);
+        }
+
+        // Puente para Eliminar
+        public bool EliminarColaborador(string documentoIdentidad)
+        {
+            return objetoCD.EliminarColaborador(documentoIdentidad);
+        }
+        
+        // El método para listar que ya tenías
+        public DataTable MostrarColaboradores(string busqueda = "")
+        {
+            return objetoCD.ListarColaboradores(busqueda);
+        }
+    }
 }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             PnlReg1 = new Panel();
+            label12 = new Label();
             CbxUbicacion = new ComboBox();
             CbxDepartamento = new ComboBox();
             BtnSiguiente = new Button();
@@ -59,6 +60,7 @@
             CbxPerfil = new ComboBox();
             CbxEstado = new ComboBox();
             PicFoto = new PictureBox();
+            CloseForm = new Button();
             PnlReg1.SuspendLayout();
             PnlReg2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PicFoto).BeginInit();
@@ -67,6 +69,7 @@
             // PnlReg1
             // 
             PnlReg1.BackColor = Color.FromArgb(7, 4, 40);
+            PnlReg1.Controls.Add(label12);
             PnlReg1.Controls.Add(CbxUbicacion);
             PnlReg1.Controls.Add(CbxDepartamento);
             PnlReg1.Controls.Add(BtnSiguiente);
@@ -84,10 +87,22 @@
             PnlReg1.Controls.Add(txtNombre);
             PnlReg1.Controls.Add(lblCo);
             PnlReg1.Controls.Add(txtCedula);
-            PnlReg1.Location = new Point(87, 37);
+            PnlReg1.Location = new Point(42, 40);
             PnlReg1.Name = "PnlReg1";
             PnlReg1.Size = new Size(1000, 824);
             PnlReg1.TabIndex = 0;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.BackColor = Color.Transparent;
+            label12.Font = new Font("Segoe UI", 14.1428576F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label12.ForeColor = Color.White;
+            label12.Location = new Point(365, 32);
+            label12.Name = "label12";
+            label12.Size = new Size(284, 45);
+            label12.TabIndex = 34;
+            label12.Text = "Nuevo Empleado";
             // 
             // CbxUbicacion
             // 
@@ -107,7 +122,7 @@
             // 
             // BtnSiguiente
             // 
-            BtnSiguiente.BackColor = Color.Transparent;
+            BtnSiguiente.BackColor = Color.FromArgb(7, 4, 40);
             BtnSiguiente.BackgroundImage = Properties.Resources.next;
             BtnSiguiente.BackgroundImageLayout = ImageLayout.Zoom;
             BtnSiguiente.FlatStyle = FlatStyle.Flat;
@@ -279,7 +294,7 @@
             PnlReg2.Controls.Add(CbxPerfil);
             PnlReg2.Controls.Add(CbxEstado);
             PnlReg2.Controls.Add(PicFoto);
-            PnlReg2.Location = new Point(87, 37);
+            PnlReg2.Location = new Point(40, 40);
             PnlReg2.Name = "PnlReg2";
             PnlReg2.Size = new Size(1000, 824);
             PnlReg2.TabIndex = 1;
@@ -412,14 +427,31 @@
             PicFoto.TabIndex = 0;
             PicFoto.TabStop = false;
             // 
+            // CloseForm
+            // 
+            CloseForm.BackColor = Color.Transparent;
+            CloseForm.BackgroundImage = Properties.Resources.close;
+            CloseForm.BackgroundImageLayout = ImageLayout.Stretch;
+            CloseForm.FlatAppearance.BorderSize = 0;
+            CloseForm.FlatStyle = FlatStyle.Flat;
+            CloseForm.ForeColor = Color.Transparent;
+            CloseForm.Location = new Point(1046, 12);
+            CloseForm.Name = "CloseForm";
+            CloseForm.RightToLeft = RightToLeft.No;
+            CloseForm.Size = new Size(33, 34);
+            CloseForm.TabIndex = 9;
+            CloseForm.UseVisualStyleBackColor = false;
+            CloseForm.Click += CloseForm_Click;
+            // 
             // Enter_Employee
             // 
-            AutoScaleDimensions = new SizeF(12F, 30F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(168F, 168F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.FromArgb(7, 4, 56);
-            ClientSize = new Size(1200, 900);
-            Controls.Add(PnlReg1);
+            ClientSize = new Size(1100, 900);
+            Controls.Add(CloseForm);
             Controls.Add(PnlReg2);
+            Controls.Add(PnlReg1);
             ForeColor = Color.Transparent;
             FormBorderStyle = FormBorderStyle.None;
             Name = "Enter_Employee";
@@ -467,5 +499,7 @@
         private Button BtnGuardar;
         private Label label11;
         private Label label10;
+        private Button CloseForm;
+        private Label label12;
     }
 }

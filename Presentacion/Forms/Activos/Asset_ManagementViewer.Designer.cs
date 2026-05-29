@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_ManagementViewer));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asset_ManagementViewer));
             panel1 = new Panel();
+            pictureBox1 = new PictureBox();
             btnCancelar = new Button();
             btnEliminar = new Button();
             btnModificar = new Button();
@@ -63,6 +64,7 @@
             panel3 = new Panel();
             dgvActivos = new DataGridView();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tabControl1.SuspendLayout();
             Base.SuspendLayout();
             Hardware.SuspendLayout();
@@ -73,7 +75,8 @@
             // 
             // panel1
             // 
-            panel1.BackColor = Color.FromArgb(7, 4, 40);
+            panel1.BackColor = Color.FromArgb(12, 9, 53);
+            panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(btnCancelar);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnModificar);
@@ -84,10 +87,22 @@
             panel1.Size = new Size(486, 1236);
             panel1.TabIndex = 0;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+            pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+            pictureBox1.Location = new Point(129, 20);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(234, 71);
+            pictureBox1.TabIndex = 4;
+            pictureBox1.TabStop = false;
+            // 
             // btnCancelar
             // 
             btnCancelar.BackColor = Color.FromArgb(244, 154, 36);
             btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            btnCancelar.ForeColor = Color.White;
             btnCancelar.Location = new Point(70, 1161);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(353, 58);
@@ -100,6 +115,8 @@
             // 
             btnEliminar.BackColor = Color.FromArgb(244, 154, 36);
             btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            btnEliminar.ForeColor = Color.White;
             btnEliminar.Location = new Point(70, 1099);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(353, 58);
@@ -112,6 +129,8 @@
             // 
             btnModificar.BackColor = Color.FromArgb(244, 154, 36);
             btnModificar.FlatStyle = FlatStyle.Flat;
+            btnModificar.Font = new Font("Segoe UI Semibold", 9.857143F, FontStyle.Bold);
+            btnModificar.ForeColor = Color.White;
             btnModificar.Location = new Point(70, 1037);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(353, 58);
@@ -138,7 +157,7 @@
             // Base
             // 
             Base.AccessibleRole = AccessibleRole.None;
-            Base.BackColor = Color.FromArgb(7, 4, 40);
+            Base.BackColor = Color.FromArgb(12, 9, 53);
             Base.Controls.Add(cmbEstadoOperativo);
             Base.Controls.Add(lblEtiquetaActivo);
             Base.Controls.Add(txtCosto);
@@ -233,7 +252,7 @@
             // 
             // Hardware
             // 
-            Hardware.BackColor = Color.FromArgb(7, 4, 40);
+            Hardware.BackColor = Color.FromArgb(12, 9, 53);
             Hardware.Controls.Add(txtResolucionPantalla);
             Hardware.Controls.Add(txtDireccionIP);
             Hardware.Controls.Add(txtDireccionMAC);
@@ -357,7 +376,7 @@
             // 
             // dgvActivos
             // 
-            dgvActivos.BackgroundColor = Color.FromArgb(7, 4, 40);
+            dgvActivos.BackgroundColor = Color.FromArgb(12, 9, 53);
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = Color.FromArgb(7, 4, 40);
             dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
@@ -398,6 +417,7 @@
             Text = "Asset_ManagementViewer";
             Load += Asset_ManagementViewer_Load;
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             tabControl1.ResumeLayout(false);
             Base.ResumeLayout(false);
             Base.PerformLayout();
@@ -442,5 +462,6 @@
         private DataGridView dgvActivos;
         private ComboBox cmbFiltroEstado;
         private ComboBox cmbFiltroCategoria;
+        private PictureBox pictureBox1;
     }
 }
